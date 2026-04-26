@@ -7,12 +7,16 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { TenantContext } from '../../Infrastructure/Tenancy/TenantContext';
+import { TenantInterceptor } from '../Http/Tenancy/TenantInterceptor';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGODB_URI ?? ''),
   ],
+  providers: [TenantContext, TenantInterceptor],
+  exports: [TenantContext, TenantInterceptor],
 })
 export class RootModule implements NestModule {
   configure(_consumer: MiddlewareConsumer) {
