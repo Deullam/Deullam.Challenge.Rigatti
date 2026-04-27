@@ -28,6 +28,7 @@ import { ListProductsUseCase } from '../../Application/Product/UseCases/ListProd
 import { CreateProductUseCase } from '../../Application/Product/UseCases/CreateProductUseCase';
 import { UpdateProductUseCase } from '../../Application/Product/UseCases/UpdateProductUseCase';
 import { DeleteProductUseCase } from '../../Application/Product/UseCases/DeleteProductUseCase';
+import { GetProductUseCase } from '../../Application/Product/UseCases/GetProductUseCase';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { DeleteProductUseCase } from '../../Application/Product/UseCases/DeleteP
     LoginUseCase,
     RegisterUseCase,
     ListProductsUseCase,
+    GetProductUseCase,
     CreateProductUseCase,
     UpdateProductUseCase,
     DeleteProductUseCase,

@@ -9,6 +9,7 @@ import { CreateProductDto } from '../../../Application/Product/DTOs/CreateProduc
 import { UpdateProductDto } from '../../../Application/Product/DTOs/UpdateProductDto';
 import { CreateProductUseCase } from '../../../Application/Product/UseCases/CreateProductUseCase';
 import { DeleteProductUseCase } from '../../../Application/Product/UseCases/DeleteProductUseCase';
+import { GetProductUseCase } from '../../../Application/Product/UseCases/GetProductUseCase';
 import { ListProductsUseCase } from '../../../Application/Product/UseCases/ListProductsUseCase';
 import { UpdateProductUseCase } from '../../../Application/Product/UseCases/UpdateProductUseCase';
 import { RequestUser } from '../../../Shared/IoC/http';
@@ -23,6 +24,7 @@ type RequestWithUser = { user: RequestUser };
 export class ProductsController {
   constructor(
     private readonly listProducts: ListProductsUseCase,
+    private readonly getProduct: GetProductUseCase,
     private readonly createProduct: CreateProductUseCase,
     private readonly updateProduct: UpdateProductUseCase,
     private readonly deleteProduct: DeleteProductUseCase,
@@ -31,6 +33,11 @@ export class ProductsController {
   @Get()
   async list(@Req() req: RequestWithUser) {
     return this.listProducts.execute({ companyId: req.user.companyId });
+  }
+
+  @Get(':id')
+  async get(@Req() req: RequestWithUser, @Param('id') id: string) {
+    return this.getProduct.execute({ companyId: req.user.companyId, id });
   }
 
   @Post()
