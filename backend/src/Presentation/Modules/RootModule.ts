@@ -12,6 +12,7 @@ import { PassportModule } from '@nestjs/passport';
 import { TenantContext } from '../../Infrastructure/Tenancy/TenantContext';
 import { MongoosePersistenceModule } from '../../Infrastructure/Database/Mongoose/MongoosePersistenceModule';
 import { UserRepository } from '../../Infrastructure/Repositories/User/UserRepository';
+import { ProductRepository } from '../../Infrastructure/Repositories/Product/ProductRepository';
 import { BcryptHasher } from '../../Infrastructure/Security/Hashing/BcryptHasher';
 import { JwtTokenService } from '../../Infrastructure/Security/Jwt/JwtTokenService';
 import { TOKENS } from '../../Shared/IoC/tokens';
@@ -22,6 +23,11 @@ import { RolesGuard } from '../Http/Auth/RolesGuard';
 import { TenantInterceptor } from '../Http/Tenancy/TenantInterceptor';
 import { LoginUseCase } from '../../Application/Auth/UseCases/LoginUseCase';
 import { RegisterUseCase } from '../../Application/Auth/UseCases/RegisterUseCase';
+import { ProductsController } from '../Http/Product/ProductsController';
+import { ListProductsUseCase } from '../../Application/Product/UseCases/ListProductsUseCase';
+import { CreateProductUseCase } from '../../Application/Product/UseCases/CreateProductUseCase';
+import { UpdateProductUseCase } from '../../Application/Product/UseCases/UpdateProductUseCase';
+import { DeleteProductUseCase } from '../../Application/Product/UseCases/DeleteProductUseCase';
 
 @Module({
   imports: [
@@ -35,7 +41,7 @@ import { RegisterUseCase } from '../../Application/Auth/UseCases/RegisterUseCase
     }),
     MongoosePersistenceModule,
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, ProductsController],
   providers: [
     TenantContext,
     TenantInterceptor,
@@ -44,7 +50,12 @@ import { RegisterUseCase } from '../../Application/Auth/UseCases/RegisterUseCase
     RolesGuard,
     LoginUseCase,
     RegisterUseCase,
+    ListProductsUseCase,
+    CreateProductUseCase,
+    UpdateProductUseCase,
+    DeleteProductUseCase,
     { provide: TOKENS.IUserRepository, useClass: UserRepository },
+    { provide: TOKENS.IProductRepository, useClass: ProductRepository },
     { provide: TOKENS.IHasher, useClass: BcryptHasher },
     { provide: TOKENS.ITokenService, useClass: JwtTokenService },
   ],
