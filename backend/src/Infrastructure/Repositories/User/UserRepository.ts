@@ -10,13 +10,20 @@ import { Model, Types } from 'mongoose';
 import { IUserRepository } from '../../../Domain/User/IUserRepository';
 import { User } from '../../../Domain/User/User';
 import { UserSchemaClass } from '../../Database/Mongoose/Schemas/UserSchema';
+import { MultiTenantMongooseRepository } from '../../Database/Mongoose/MultiTenantMongooseRepository';
+import { TenantContext } from '../../Tenancy/TenantContext';
 
 @Injectable()
-export class UserRepository implements IUserRepository {
+export class UserRepository
+  extends MultiTenantMongooseRepository<UserSchemaClass>
+  implements IUserRepository {
   constructor(
     @InjectModel(UserSchemaClass.name)
     private readonly userModel: Model<UserSchemaClass>,
-  ) {}
+    protected readonly tenantContext: TenantContext,
+  ) {
+    super(userModel, tenantContext);
+  }
 
   async create(input: {
     email: string;
@@ -25,7 +32,7 @@ export class UserRepository implements IUserRepository {
     companyId: string;
   }): Promise<User> {
     const created = await this.userModel.create({
-      email: input.email,
+      email: input.email.toLowerCase(),
       passwordHash: input.passwordHash,
       role: input.role,
       companyId: new Types.ObjectId(input.companyId),
@@ -41,7 +48,10 @@ export class UserRepository implements IUserRepository {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const found = await this.userModel.findOne({ email: email.toLowerCase() }).lean();
+    // Busca global (sem filtro de tenant) para suportar o login
+    const found = await this.getGlobalModel()
+      .findOne({ email: email.toLowerCase() })
+      .lean();
     if (!found) return null;
     return new User(
       found._id.toString(),
@@ -52,8 +62,11 @@ export class UserRepository implements IUserRepository {
     );
   }
 
+
   async findById(id: string): Promise<User | null> {
-    const found = await this.userModel.findById(id).lean();
+    const found = await this.getModelWithTenantFilter()
+      .findOne({ _id: id })
+      .lean();
     if (!found) return null;
     return new User(
       found._id.toString(),
@@ -64,4 +77,5 @@ export class UserRepository implements IUserRepository {
     );
   }
 }
+
 
