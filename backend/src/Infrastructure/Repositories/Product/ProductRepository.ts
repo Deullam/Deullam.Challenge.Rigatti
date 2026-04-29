@@ -20,7 +20,7 @@ export class ProductRepository
   constructor(
     @InjectModel(ProductSchemaClass.name)
     private readonly productModel: Model<ProductSchemaClass>,
-    private readonly tenantContext: TenantContext,
+    protected readonly tenantContext: TenantContext, // <-- Corrigido: de 'private' para 'protected'
   ) {
     super(productModel, tenantContext);
   }
