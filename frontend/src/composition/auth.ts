@@ -1,4 +1,4 @@
-import { SupabaseAuthRepository } from "@/infrastructure/auth/SupabaseAuthRepository";
+import { NestAuthRepository } from "@/infrastructure/auth/NestAuthRepository";
 import { SupabaseProfileRepository } from "@/infrastructure/auth/SupabaseProfileRepository";
 import { AuthUseCases } from "@/application/auth/AuthUseCases";
 
@@ -7,6 +7,7 @@ import { AuthUseCases } from "@/application/auth/AuthUseCases";
  * Single place that wires concrete infrastructure into use-cases.
  */
 export const authUseCases = new AuthUseCases(
-  new SupabaseAuthRepository(),
+  new NestAuthRepository() as any,
   new SupabaseProfileRepository(),
 );
+

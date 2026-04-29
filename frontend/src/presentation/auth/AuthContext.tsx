@@ -1,71 +1,63 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { Session, User } from "@supabase/supabase-js";
 import { authUseCases } from "@/composition/auth";
-import type { Role } from "@/domain/auth/entities";
+import type { AuthUser } from "@/domain/auth/AuthRepository";
 
 /**
  * Presentation layer — React adapter over the auth use-cases.
- * The rest of the UI consumes useAuth() and never touches infrastructure directly.
+ * Agora integrado com o Backend NestJS.
  */
 interface AuthState {
-  user: User | null;
-  session: Session | null;
+  user: AuthUser | null;
   loading: boolean;
   companyId: string | null;
-  companyName: string | null;
-  role: Role | null;
-  refresh: () => Promise<void>;
-  signOut: () => Promise<void>;
+  role: string | null;
+  login: (credentials: any) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const Ctx = createContext<AuthState>({} as AuthState);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [companyId, setCompanyId] = useState<string | null>(null);
-  const [companyName, setCompanyName] = useState<string | null>(null);
-  const [role, setRole] = useState<Role | null>(null);
-
-  const loadProfile = async (uid: string) => {
-    const ctx = await authUseCases.loadUserContext(uid);
-    setCompanyId(ctx.companyId);
-    setCompanyName(ctx.companyName);
-    setRole(ctx.role);
-  };
 
   useEffect(() => {
-    // Set up listener FIRST, then check existing session.
-    const sub = authUseCases.authRepository.onAuthStateChange((sess) => {
-      setSession(sess);
-      setUser(sess?.user ?? null);
-      if (sess?.user) {
-        // Defer to avoid deadlock inside the auth callback.
-        setTimeout(() => loadProfile(sess.user!.id), 0);
-      } else {
-        setCompanyId(null); setCompanyName(null); setRole(null);
+    const initAuth = async () => {
+      const currentUser = await authUseCases.authRepository.getCurrentUser();
+      if (currentUser) {
+        setUser(currentUser);
       }
-    });
-
-    authUseCases.authRepository.getSession().then((session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) loadProfile(session.user.id).finally(() => setLoading(false));
-      else setLoading(false);
-    });
-
-    return () => sub.unsubscribe();
+      setLoading(false);
+    };
+    initAuth();
   }, []);
 
-  const refresh = async () => { if (user) await loadProfile(user.id); };
-  const signOut = async () => { await authUseCases.signOut(); };
+  const login = async (credentials: any) => {
+    const { user: loggedUser, token } = await authUseCases.authRepository.login(credentials);
+    localStorage.setItem('auth_token', token);
+    localStorage.setItem('auth_user', JSON.stringify(loggedUser));
+    setUser(loggedUser);
+  };
+
+  const logout = async () => {
+    await authUseCases.authRepository.logout();
+    setUser(null);
+    window.location.href = '/login';
+  };
 
   return (
-    <Ctx.Provider value={{ user, session, loading, companyId, companyName, role, refresh, signOut }}>
+    <Ctx.Provider value={{
+      user,
+      loading,
+      companyId: user?.companyId ?? null,
+      role: user?.role ?? null,
+      login,
+      logout
+    }}>
       {children}
     </Ctx.Provider>
   );
 }
 
 export const useAuth = () => useContext(Ctx);
+
