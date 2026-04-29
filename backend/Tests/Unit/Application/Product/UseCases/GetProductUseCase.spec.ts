@@ -4,9 +4,9 @@
  * @description Testes unitários para o GetProductUseCase.
  */
 import { NotFoundException } from '@nestjs/common';
-import { Product } from 'src/Domain/Product/Product';
-import { GetProductUseCase } from 'src/Application/Product/UseCases/GetProductUseCase';
-import { IProductRepository } from 'src/Domain/Product/IProductRepository';
+import { Product } from '../../../../../src/Domain/Product/Product';
+import { GetProductUseCase } from '../../../../../src/Application/Product/UseCases/GetProductUseCase';
+import { IProductRepository } from '../../../../../src/Domain/Product/IProductRepository';
 
 // Mock do IProductRepository
 const mockProductRepository: IProductRepository = {
