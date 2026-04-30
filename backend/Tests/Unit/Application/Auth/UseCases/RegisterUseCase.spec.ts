@@ -58,7 +58,7 @@ describe('RegisterUseCase', () => {
       role: 'admin',
     });
 
-    expect(result.accessToken).toBe('jwt_token');
+    expect(result.access_token).toBe('jwt_token');
     expect(result.user.email).toBe('new@test.com');
     expect(userRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({

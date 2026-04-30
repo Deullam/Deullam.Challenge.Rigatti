@@ -2,32 +2,43 @@
  * @author Deullam Justi
  * @copyright Copyright (c) 2026 Deullam Justi - Todos os direitos reservados.
  * @description Repositório de autenticação que se comunica com o backend NestJS.
+ * Implementa as chamadas HTTP para Login e Criação de Empresa (Workspace).
  */
 
-import { AuthRepository, LoginCredentials, RegisterCredentials, AuthUser } from '../../domain/auth/AuthRepository';
+import { IAuthRepository, ILoginCredentials, IRegisterCredentials, IAuthUser } from '../../domain/auth/IAuthRepository';
 import { api } from '../../lib/api';
 
-export class NestAuthRepository implements AuthRepository {
-  async login(credentials: LoginCredentials): Promise<{ user: AuthUser; token: string }> {
+export class NestAuthRepository implements IAuthRepository {
+
+  /**
+ * @description Implementação do repositório para NestJS.
+ * Garante que os nomes das chaves no LocalStorage sejam compatíveis com o AuthContext.
+ */
+  async login(credentials: ILoginCredentials): Promise<{ user: IAuthUser; access_token: string }> {
+    // 1. Chamada direta à tua API NestJS
     const response = await api.post('/auth/login', credentials);
-    const { accessToken, user } = response.data;
-    
+    const { access_token, user } = response.data;
+
+    // 2. Documentação: Forçamos o salvamento com os nomes que o nosso Contexto espera
+    // Eliminamos aqui qualquer interferência de nomes automáticos do Supabase
+    localStorage.setItem('access_token', access_token);
+    localStorage.setItem('auth_user', JSON.stringify(user));
+
     return {
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        companyId: user.companyId
-      },
-      token: accessToken
+      user,
+      access_token
     };
   }
 
-  async register(credentials: RegisterCredentials): Promise<{ user: AuthUser; token: string }> {
-    // Nota: O backend atual espera companyId no registro. 
-    // Em um fluxo real, o frontend enviaria dados da empresa para criar uma nova.
+  /**
+   * @description Processa o cadastro de um novo Administrador e cria uma nova Empresa.
+   */
+  async register(credentials: IRegisterCredentials): Promise<{ user: IAuthUser; access_token: string; companyName: string }> {
+    // Documentação: O Repositório envia os dados (incluindo o companyName) para o backend.
+    // O backend NestJS é quem cria a empresa no banco e devolve o usuário recém-criado.
     const response = await api.post('/auth/register', credentials);
-    const { accessToken, user } = response.data;
+
+    const { access_token, user, companyName } = response.data;
 
     return {
       user: {
@@ -36,11 +47,16 @@ export class NestAuthRepository implements AuthRepository {
         role: user.role,
         companyId: user.companyId
       },
-      token: accessToken
+      access_token,
+      // Documentação: Retornamos o nome da empresa para respeitar a interface
+      companyName: companyName || credentials.companyName
     };
   }
 
-  async getCurrentUser(): Promise<AuthUser | null> {
+  /**
+   * @description Recupera o usuário logado diretamente da memória do navegador (Cache).
+   */
+  async getCurrentUser(): Promise<IAuthUser | null> {
     const userStr = localStorage.getItem('auth_user');
     if (!userStr) return null;
     try {
@@ -50,8 +66,12 @@ export class NestAuthRepository implements AuthRepository {
     }
   }
 
+  /**
+   * @description Realiza o logoff local, limpando todas as chaves de segurança.
+   */
   async logout(): Promise<void> {
-    localStorage.removeItem('auth_token');
+    // Garantimos que a chave 'access_token' exata seja removida.
+    localStorage.removeItem('access_token');
     localStorage.removeItem('auth_user');
   }
 }

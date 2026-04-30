@@ -17,7 +17,7 @@ export class RegisterUseCase {
     @Inject(TOKENS.IUserRepository) private readonly users: IUserRepository,
     @Inject(TOKENS.IHasher) private readonly hasher: IHasher,
     @Inject(TOKENS.ITokenService) private readonly tokens: ITokenService,
-  ) {}
+  ) { }
 
   async execute(input: { email: string; password: string; companyId: string; role?: 'admin' | 'user' }) {
     const existing = await this.users.findByEmail(input.email);
@@ -33,14 +33,14 @@ export class RegisterUseCase {
       companyId: input.companyId,
     });
 
-    const accessToken = await this.tokens.sign({
+    const access_token = await this.tokens.sign({
       userId: created.id,
       companyId: created.companyId,
       role: created.role,
     });
 
     return {
-      accessToken,
+      access_token,
       user: { id: created.id, email: created.email, role: created.role, companyId: created.companyId },
     };
   }

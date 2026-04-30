@@ -52,7 +52,7 @@ describe('LoginUseCase', () => {
 
     const result = await useCase.execute({ email: 'test@test.com', password: 'password' });
 
-    expect(result.accessToken).toBe('jwt_token');
+    expect(result.access_token).toBe('jwt_token');
     expect(result.user.email).toBe('test@test.com');
   });
 

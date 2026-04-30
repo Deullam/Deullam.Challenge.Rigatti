@@ -5,10 +5,16 @@
  */
 
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config'; // Import ConfigModule
 import { RootModule } from './Presentation/Modules/RootModule';
+import { MongoosePersistenceModule } from './Infrastructure/Database/Mongoose/MongoosePersistenceModule'; // Import MongoosePersistenceModule
 
 @Module({
-  imports: [RootModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }), // Torna o ConfigModule global
+    MongoosePersistenceModule, // Importa o módulo de persistência
+    RootModule,
+  ],
 })
-export class AppModule {}
+export class AppModule { }
 

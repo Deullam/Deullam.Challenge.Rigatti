@@ -6,10 +6,10 @@ import type { ChatMessage } from "@/domain/chat/ChatMessage";
  * Parses `data: …\n\n` lines and forwards token deltas to the caller.
  */
 export class EdgeFunctionChatRepository implements ChatRepository {
-  constructor(private readonly baseUrl: string = import.meta.env.VITE_SUPABASE_URL) {}
+  constructor(private readonly baseUrl: string = import.meta.env.VITE_SUPABASE_URL) { }
 
-  async streamReply({ accessToken, messages, onToken, signal }: {
-    accessToken: string;
+  async streamReply({ access_token, messages, onToken, signal }: {
+    access_token: string;
     messages: ChatMessage[];
     onToken: (token: string) => void;
     signal?: AbortSignal;
@@ -18,7 +18,7 @@ export class EdgeFunctionChatRepository implements ChatRepository {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${access_token}`,
       },
       body: JSON.stringify({ messages }),
       signal,

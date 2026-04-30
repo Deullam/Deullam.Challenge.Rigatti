@@ -10,7 +10,7 @@ export interface AuthIdentity {
 }
 
 export interface AuthSessionToken {
-  accessToken: string;
+  access_token: string;
 }
 
 export interface UserContext {

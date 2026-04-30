@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { AuthRepository } from "@/domain/auth/AuthRepository";
-import type { SignInInput, SignUpInput } from "@/domain/auth/entities";
+import type { AuthRepository } from "@/domain/auth/IAuthRepository";
+import type { SignInInput, SignUpInput } from "@/domain/auth/Auth";
 
 /**
  * Infrastructure layer — Supabase implementation of AuthRepository.

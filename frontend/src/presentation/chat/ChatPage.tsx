@@ -49,7 +49,7 @@ export default function ChatPage() {
 
     try {
       await chatUseCases.sendMessage({
-        accessToken: session.access_token,
+        access_token: session.access_token,
         history: next,
         onToken: upsert,
       });
@@ -90,9 +90,8 @@ export default function ChatPage() {
                 <Sparkles className="h-4 w-4 text-primary-foreground" />
               </div>
             )}
-            <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 ${
-              m.role === "user" ? "bg-primary text-primary-foreground" : "bg-card border"
-            }`}>
+            <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 ${m.role === "user" ? "bg-primary text-primary-foreground" : "bg-card border"
+              }`}>
               {m.role === "assistant" ? (
                 <div className="prose prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                   <ReactMarkdown>{m.content || "…"}</ReactMarkdown>

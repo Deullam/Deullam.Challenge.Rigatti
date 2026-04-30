@@ -6,7 +6,7 @@ import type { ChatMessage } from "./ChatMessage";
  */
 export interface ChatRepository {
   streamReply(args: {
-    accessToken: string;
+    access_token: string;
     messages: ChatMessage[];
     onToken: (token: string) => void;
     signal?: AbortSignal;

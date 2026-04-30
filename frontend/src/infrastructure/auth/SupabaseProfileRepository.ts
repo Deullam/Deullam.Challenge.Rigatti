@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { ProfileRepository } from "@/domain/auth/AuthRepository";
-import type { Role } from "@/domain/auth/entities";
+import type { ProfileRepository } from "@/domain/auth/IAuthRepository";
+import type { Role } from "@/domain/auth/Auth";
 
 /**
  * Infrastructure layer — profiles + roles + companies access.

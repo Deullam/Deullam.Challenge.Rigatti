@@ -16,7 +16,7 @@ export class LoginUseCase {
     @Inject(TOKENS.IUserRepository) private readonly users: IUserRepository,
     @Inject(TOKENS.IHasher) private readonly hasher: IHasher,
     @Inject(TOKENS.ITokenService) private readonly tokens: ITokenService,
-  ) {}
+  ) { }
 
   async execute(input: { email: string; password: string }) {
     const user = await this.users.findByEmail(input.email);
@@ -25,14 +25,14 @@ export class LoginUseCase {
     const ok = await this.hasher.compare(input.password, user.passwordHash);
     if (!ok) throw new UnauthorizedException('Invalid credentials.');
 
-    const accessToken = await this.tokens.sign({
+    const access_token = await this.tokens.sign({
       userId: user.id,
       companyId: user.companyId,
       role: user.role,
     });
 
     return {
-      accessToken,
+      access_token,
       user: { id: user.id, email: user.email, role: user.role, companyId: user.companyId },
     };
   }

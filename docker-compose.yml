@@ -17,17 +17,22 @@ services:
     container_name: deullam_challenge_backend
     ports:
       - "3001:3001"
+    env_file:
+      - ./backend/.env
     environment:
       NODE_ENV: development
       PORT: 3001
       MONGODB_URI: mongodb://root:root@mongodb:27017/deullam_challenge?authSource=admin
-      JWT_SECRET: changeme-dev-secret
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
     depends_on:
       - mongodb
     volumes:
+      # Sincroniza seus arquivos locais com o contêiner em tempo real
       - ./backend:/app
+      # Protege a pasta node_modules do contêiner contra o Windows
       - /app/node_modules
+    # Documentação: A mágica acontece aqui! 
+    # O Docker injeta todas as variáveis deste arquivo na memória do contêiner.
+
 
   frontend:
     build:
@@ -38,14 +43,13 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
-      NEXT_PUBLIC_API_URL: http://localhost:3001
+      # Vite usa o prefixo VITE_ para variáveis públicas
+      VITE_API_URL: http://localhost:3001
     depends_on:
       - backend
     volumes:
       - ./frontend:/app
       - /app/node_modules
-      - /app/.next
 
 volumes:
   mongo-data:
-
