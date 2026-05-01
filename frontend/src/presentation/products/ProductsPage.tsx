@@ -55,7 +55,7 @@ export default function ProductsPage() {
         price: Number(editing.price ?? 0),
         category: editing.category ?? "geral",
         image_url: editing.image_url || null,
-        company_id: companyId,
+        companyId: companyId,
       }, editing.id);
       setOpen(false); setEditing(null); load();
       toast({ title: editing.id ? "Atualizado" : "Criado" });

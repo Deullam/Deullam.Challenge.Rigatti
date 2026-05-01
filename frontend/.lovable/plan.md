@@ -10,12 +10,12 @@ A complete multi-tenant SaaS where companies manage their product catalog and ch
 ## 1. Data model (Postgres via Lovable Cloud)
 
 - **companies** — `id, name, created_at`
-- **profiles** — `id (= auth user id), email, company_id, created_at` (auto-created on signup via trigger)
-- **user_roles** — `id, user_id, company_id, role` enum (`admin` | `user`) — separate table to prevent privilege escalation
-- **products** — `id, company_id, name, description, price, category, image_url, created_at, updated_at`
+- **profiles** — `id (= auth user id), email, companyId, created_at` (auto-created on signup via trigger)
+- **user_roles** — `id, user_id, companyId, role` enum (`admin` | `user`) — separate table to prevent privilege escalation
+- **products** — `id, companyId, name, description, price, category, image_url, created_at, updated_at`
 
 **Tenant isolation (the "Golden Rule"):**
-Every table with `company_id` gets RLS policies that only allow rows where `company_id = (select company_id from profiles where id = auth.uid())`. This is enforced by the database — no middleware needed, and it's impossible to bypass from any client. A `SECURITY DEFINER` function `has_role(user_id, company_id, role)` powers admin-only checks.
+Every table with `companyId` gets RLS policies that only allow rows where `companyId = (select companyId from profiles where id = auth.uid())`. This is enforced by the database — no middleware needed, and it's impossible to bypass from any client. A `SECURITY DEFINER` function `has_role(user_id, companyId, role)` powers admin-only checks.
 
 **RBAC:**
 - `admin` → full CRUD on `products` (within their company)
@@ -57,13 +57,13 @@ Every table with `company_id` gets RLS policies that only allow rows where `comp
 ## 4. AI chat with tool calling + streaming
 
 **Edge function `chat`** (Deno, deployed automatically):
-1. Validates JWT, extracts `user_id` → looks up `company_id`
+1. Validates JWT, extracts `user_id` → looks up `companyId`
 2. Calls Lovable AI Gateway (`google/gemini-3-flash-preview` by default) with:
    - System prompt explaining the agent helps users explore the company catalog
    - Full conversation history from client
    - **Tool definition**: `search_company_products(query, category?, max_price?)`
    - `stream: true`
-3. When the model emits a tool call, the function executes the DB query **server-side using the resolved `company_id`** (client cannot tamper with tenant scope), feeds results back, and continues streaming
+3. When the model emits a tool call, the function executes the DB query **server-side using the resolved `companyId`** (client cannot tamper with tenant scope), feeds results back, and continues streaming
 4. Streams SSE chunks back to the browser; client parses line-by-line and updates the last assistant message progressively
 
 This guarantees the agent can never see another company's products, even if prompt-injected.
@@ -86,7 +86,7 @@ Credentials displayed on the login page in a "Demo accounts" panel for instant t
 A `README.md` covering:
 - One-click run (it's already running in Lovable preview — no Docker needed)
 - All 4 seed credentials
-- Architecture decisions: why RLS beats middleware for multi-tenant, how the edge function enforces `company_id` on tool calls, how SSE streaming + line-buffered parsing works, RBAC via separate `user_roles` table
+- Architecture decisions: why RLS beats middleware for multi-tenant, how the edge function enforces `companyId` on tool calls, how SSE streaming + line-buffered parsing works, RBAC via separate `user_roles` table
 
 ---
 

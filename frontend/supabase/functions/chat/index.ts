@@ -28,8 +28,8 @@ const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY")!;
 // ═════════════════════════════════════════════════════════════════════════════
 
 interface ChatMessage { role: string; content?: string; tool_call_id?: string; tool_calls?: any[]; }
-interface ProductRow  { name: string; description: string; price: number; category: string; }
-interface SearchArgs  { query?: string; category?: string; max_price?: number; }
+interface ProductRow { name: string; description: string; price: number; category: string; }
+interface SearchArgs { query?: string; category?: string; max_price?: number; }
 
 interface AuthRepository {
   resolveUserId(authorizationHeader: string): Promise<string | null>;
@@ -63,24 +63,24 @@ class SupabaseAuthRepository implements AuthRepository {
 }
 
 class SupabaseTenantRepository implements TenantRepository {
-  constructor(private readonly admin = createClient(SUPABASE_URL, SERVICE_ROLE)) {}
+  constructor(private readonly admin = createClient(SUPABASE_URL, SERVICE_ROLE)) { }
   async getCompanyForUser(userId: string) {
     const { data: profile } = await this.admin
-      .from("profiles").select("company_id").eq("id", userId).maybeSingle();
-    if (!profile?.company_id) return null;
+      .from("profiles").select("companyId").eq("id", userId).maybeSingle();
+    if (!profile?.companyId) return null;
     const { data: company } = await this.admin
-      .from("companies").select("name").eq("id", profile.company_id).maybeSingle();
-    return { id: profile.company_id as string, name: (company?.name as string) ?? null };
+      .from("companies").select("name").eq("id", profile.companyId).maybeSingle();
+    return { id: profile.companyId as string, name: (company?.name as string) ?? null };
   }
 }
 
 class SupabaseProductRepository implements ProductRepository {
-  constructor(private readonly admin = createClient(SUPABASE_URL, SERVICE_ROLE)) {}
+  constructor(private readonly admin = createClient(SUPABASE_URL, SERVICE_ROLE)) { }
   async searchByCompany(companyId: string, args: SearchArgs): Promise<ProductRow[]> {
     let q = this.admin
       .from("products")
       .select("name, description, price, category")
-      .eq("company_id", companyId)
+      .eq("companyId", companyId)
       .limit(20);
     if (args?.query) q = q.or(`name.ilike.%${args.query}%,description.ilike.%${args.query}%`);
     if (args?.category) q = q.ilike("category", `%${args.category}%`);
@@ -95,7 +95,7 @@ class LovableAIGateway implements AIGateway {
   constructor(
     private readonly apiKey: string,
     private readonly model = "google/gemini-3-flash-preview",
-  ) {}
+  ) { }
   async chatCompletion(messages: ChatMessage[], tools: any[]) {
     const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -136,7 +136,7 @@ class ChatUseCases {
   constructor(
     private readonly products: ProductRepository,
     private readonly ai: AIGateway,
-  ) {}
+  ) { }
 
   buildSystemPrompt(companyName: string | null) {
     return `Você é um assistente de compras com IA da "${companyName ?? "empresa"}".

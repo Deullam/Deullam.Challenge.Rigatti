@@ -3,7 +3,7 @@ import type { ProductImageRepository } from "@/domain/products/ProductRepository
 
 /**
  * Infrastructure layer — uploads product images to the per-tenant folder.
- * The bucket policy enforces the `<company_id>/...` prefix server-side.
+ * The bucket policy enforces the `<companyId>/...` prefix server-side.
  */
 export class SupabaseProductImageRepository implements ProductImageRepository {
   async upload(companyId: string, file: File): Promise<{ url: string }> {

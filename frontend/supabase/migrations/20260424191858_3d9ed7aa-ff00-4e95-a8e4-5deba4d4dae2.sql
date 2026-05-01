@@ -14,7 +14,7 @@ ALTER TABLE public.companies ENABLE ROW LEVEL SECURITY;
 CREATE TABLE public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL,
-  company_id UUID REFERENCES public.companies(id) ON DELETE SET NULL,
+  companyId UUID REFERENCES public.companies(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
@@ -23,7 +23,7 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 CREATE TABLE public.user_roles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  company_id UUID NOT NULL REFERENCES public.companies(id) ON DELETE CASCADE,
+  companyId UUID NOT NULL REFERENCES public.companies(id) ON DELETE CASCADE,
   role public.app_role NOT NULL DEFAULT 'user',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE (user_id, role)
@@ -33,7 +33,7 @@ ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
 -- Products
 CREATE TABLE public.products (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  company_id UUID NOT NULL REFERENCES public.companies(id) ON DELETE CASCADE,
+  companyId UUID NOT NULL REFERENCES public.companies(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   description TEXT NOT NULL DEFAULT '',
   price NUMERIC(10,2) NOT NULL DEFAULT 0,
@@ -43,7 +43,7 @@ CREATE TABLE public.products (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
-CREATE INDEX idx_products_company ON public.products(company_id);
+CREATE INDEX idx_products_company ON public.products(companyId);
 CREATE INDEX idx_products_category ON public.products(category);
 
 -- ============ SECURITY DEFINER helpers ============
@@ -51,7 +51,7 @@ CREATE INDEX idx_products_category ON public.products(category);
 CREATE OR REPLACE FUNCTION public.get_user_company(_user_id UUID)
 RETURNS UUID
 LANGUAGE SQL STABLE SECURITY DEFINER SET search_path = public
-AS $$ SELECT company_id FROM public.profiles WHERE id = _user_id $$;
+AS $$ SELECT companyId FROM public.profiles WHERE id = _user_id $$;
 
 CREATE OR REPLACE FUNCTION public.has_role(_user_id UUID, _role public.app_role)
 RETURNS BOOLEAN
@@ -91,7 +91,7 @@ CREATE POLICY "Members can view their company"
 -- Profiles: read self + company members; update self
 CREATE POLICY "View own and company profiles"
   ON public.profiles FOR SELECT TO authenticated
-  USING (id = auth.uid() OR company_id = public.get_user_company(auth.uid()));
+  USING (id = auth.uid() OR companyId = public.get_user_company(auth.uid()));
 
 CREATE POLICY "Update own profile"
   ON public.profiles FOR UPDATE TO authenticated
@@ -105,26 +105,26 @@ CREATE POLICY "View own roles"
 -- Products: tenant-scoped
 CREATE POLICY "View company products"
   ON public.products FOR SELECT TO authenticated
-  USING (company_id = public.get_user_company(auth.uid()));
+  USING (companyId = public.get_user_company(auth.uid()));
 
 CREATE POLICY "Admins insert products in their company"
   ON public.products FOR INSERT TO authenticated
   WITH CHECK (
-    company_id = public.get_user_company(auth.uid())
+    companyId = public.get_user_company(auth.uid())
     AND public.has_role(auth.uid(), 'admin')
   );
 
 CREATE POLICY "Admins update products in their company"
   ON public.products FOR UPDATE TO authenticated
   USING (
-    company_id = public.get_user_company(auth.uid())
+    companyId = public.get_user_company(auth.uid())
     AND public.has_role(auth.uid(), 'admin')
   );
 
 CREATE POLICY "Admins delete products in their company"
   ON public.products FOR DELETE TO authenticated
   USING (
-    company_id = public.get_user_company(auth.uid())
+    companyId = public.get_user_company(auth.uid())
     AND public.has_role(auth.uid(), 'admin')
   );
 

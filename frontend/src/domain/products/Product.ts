@@ -9,7 +9,7 @@ export interface Product {
   price: number;
   category: string;
   image_url: string | null;
-  company_id: string;
+  companyId: string;
 }
 
 export interface ProductDraft {
@@ -18,7 +18,7 @@ export interface ProductDraft {
   price: number;
   category: string;
   image_url: string | null;
-  company_id: string;
+  companyId: string;
 }
 
 export interface ProductFilters {

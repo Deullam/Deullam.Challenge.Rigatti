@@ -71,7 +71,7 @@ interface ProductSeedRepository {
 // ═════════════════════════════════════════════════════════════════════════════
 
 class SupabaseAdminUserRepository implements UserRepository {
-  constructor(private readonly admin: any) {}
+  constructor(private readonly admin: any) { }
   async ensureUser(email: string, password: string): Promise<string> {
     const { data: list } = await this.admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
     const existing = list?.users?.find((u: any) => u.email === email);
@@ -85,7 +85,7 @@ class SupabaseAdminUserRepository implements UserRepository {
 }
 
 class SupabaseCompanyRepository implements CompanyRepository {
-  constructor(private readonly admin: any) {}
+  constructor(private readonly admin: any) { }
   async ensureCompany(name: string): Promise<string> {
     const { data: existing } = await this.admin.from("companies").select("id").eq("name", name).maybeSingle();
     if (existing) return existing.id;
@@ -96,27 +96,27 @@ class SupabaseCompanyRepository implements CompanyRepository {
 }
 
 class SupabaseMembershipRepository implements MembershipRepository {
-  constructor(private readonly admin: any) {}
+  constructor(private readonly admin: any) { }
   async linkProfile(userId: string, email: string, companyId: string) {
-    await this.admin.from("profiles").upsert([{ id: userId, email, company_id: companyId }]);
+    await this.admin.from("profiles").upsert([{ id: userId, email, companyId: companyId }]);
   }
   async assignRole(userId: string, companyId: string, role: "admin" | "user") {
     await this.admin.from("user_roles").upsert(
-      [{ user_id: userId, company_id: companyId, role }],
+      [{ user_id: userId, companyId: companyId, role }],
       { onConflict: "user_id,role" },
     );
   }
 }
 
 class SupabaseProductSeedRepository implements ProductSeedRepository {
-  constructor(private readonly admin: any) {}
+  constructor(private readonly admin: any) { }
   async countByCompany(companyId: string): Promise<number> {
-    const { count } = await this.admin.from("products").select("*", { count: "exact", head: true }).eq("company_id", companyId);
+    const { count } = await this.admin.from("products").select("*", { count: "exact", head: true }).eq("companyId", companyId);
     return count ?? 0;
   }
   async bulkInsert(companyId: string, items: ProductTuple[]) {
     await this.admin.from("products").insert(items.map(([name, description, price, category]) => ({
-      company_id: companyId, name, description, price, category,
+      companyId: companyId, name, description, price, category,
     })));
   }
 }
@@ -131,7 +131,7 @@ class SeedUseCase {
     private readonly companies: CompanyRepository,
     private readonly memberships: MembershipRepository,
     private readonly products: ProductSeedRepository,
-  ) {}
+  ) { }
 
   async setupCompany(companyName: string, adminEmail: string, userEmail: string, items: ProductTuple[]) {
     const companyId = await this.companies.ensureCompany(companyName);

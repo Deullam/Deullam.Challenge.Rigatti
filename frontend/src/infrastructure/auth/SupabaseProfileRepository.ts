@@ -10,11 +10,11 @@ export class SupabaseProfileRepository implements ProfileRepository {
   async loadCompany(userId: string) {
     const { data } = await supabase
       .from("profiles")
-      .select("company_id, companies(name)")
+      .select("companyId, companies(name)")
       .eq("id", userId)
       .maybeSingle();
     return {
-      companyId: data?.company_id ?? null,
+      companyId: data?.companyId ?? null,
       companyName: (data as any)?.companies?.name ?? null,
     };
   }
@@ -34,8 +34,8 @@ export class SupabaseProfileRepository implements ProfileRepository {
       .select("id")
       .single();
     if (error) throw error;
-    await supabase.from("profiles").update({ company_id: company.id }).eq("id", userId);
-    await supabase.from("user_roles").insert({ user_id: userId, company_id: company.id, role: "admin" });
+    await supabase.from("profiles").update({ companyId: company.id }).eq("id", userId);
+    await supabase.from("user_roles").insert({ user_id: userId, companyId: company.id, role: "admin" });
     return { companyId: company.id };
   }
 }
