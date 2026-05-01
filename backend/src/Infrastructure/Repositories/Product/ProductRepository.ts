@@ -20,16 +20,15 @@ export class ProductRepository
   constructor(
     @InjectModel(ProductSchemaClass.name)
     private readonly productModel: Model<ProductSchemaClass>,
-    protected readonly tenantContext: TenantContext, // <-- Corrigido: de 'private' para 'protected'
+    protected readonly tenantContext: TenantContext,
   ) {
     super(productModel, tenantContext);
   }
 
+  /**
+   * @description Lista os produtos. O filtro de empresa já é aplicado pelo getModelWithTenantFilter().
+   */
   async listByCompany(companyId: string): Promise<Product[]> {
-    // return this.productModel
-    //   .find({ companyId: new Types.ObjectId(companyId) })
-    //   .sort({ createdAt: -1 })
-    //   .lean();
     const docs = await this.getModelWithTenantFilter()
       .find()
       .sort({ createdAt: -1 })
@@ -37,19 +36,24 @@ export class ProductRepository
     return docs.map(this.toDomain);
   }
 
+  /**
+   * @description Busca um produto específico. 
+   */
   async findByIdInCompany(input: {
     id: string;
     companyId: string;
   }): Promise<Product | null> {
-    // const doc = await this.productModel
-    //   .findOne({ _id: input.id, companyId: new Types.ObjectId(input.companyId) })
-    //   .lean();
+    // Documentação: Adicionado 'new Types.ObjectId(input.id)' para garantir 
+    // que o Mongoose entenda o ID do produto corretamente.
     const doc = await this.getModelWithTenantFilter()
-      .findOne({ _id: input.id })
+      .findOne({ _id: new Types.ObjectId(input.id) })
       .lean();
     return doc ? this.toDomain(doc) : null;
   }
 
+  /**
+   * @description Cria um novo produto no banco de dados.
+   */
   async create(input: {
     name: string;
     description: string;
@@ -64,11 +68,14 @@ export class ProductRepository
       price: input.price,
       category: input.category,
       imageUrl: input.imageUrl ?? undefined,
-      companyId: new Types.ObjectId(input.companyId), // Ainda precisamos do companyId aqui no create
+      companyId: new Types.ObjectId(input.companyId),
     });
     return this.toDomain(created.toObject());
   }
 
+  /**
+   * @description Atualiza os dados de um produto existente.
+   */
   async updateInCompany(input: {
     id: string;
     companyId: string;
@@ -82,7 +89,6 @@ export class ProductRepository
   }): Promise<Product | null> {
     const filter: FilterQuery<ProductSchemaClass> = {
       _id: new Types.ObjectId(input.id),
-      // companyId: new Types.ObjectId(input.companyId), // Removido, pois será adicionado pelo getModelWithTenantFilter
     };
     const updated = await this.getModelWithTenantFilter()
       .findOneAndUpdate(filter, input.patch, { new: true })
@@ -90,20 +96,22 @@ export class ProductRepository
     return updated ? this.toDomain(updated) : null;
   }
 
+  /**
+   * @description Apaga um produto do banco de dados.
+   */
   async deleteInCompany(input: {
     id: string;
     companyId: string;
   }): Promise<boolean> {
-    // const res = await this.productModel.deleteOne({
-    //   _id: new Types.ObjectId(input.id),
-    //   companyId: new Types.ObjectId(input.companyId),
-    // });
     const res = await this.getModelWithTenantFilter().deleteOne({
       _id: new Types.ObjectId(input.id),
     });
     return res.deletedCount === 1;
   }
 
+  /**
+   * @description Faz uma busca por texto (nome ou descrição) dentro dos produtos da empresa.
+   */
   async searchInCompany(input: {
     companyId: string;
     query: string;
@@ -111,11 +119,7 @@ export class ProductRepository
   }): Promise<Product[]> {
     const q = input.query.trim();
     if (!q) return [];
-    // const docs = await this.productModel
-    //   .find({
-    //     companyId: new Types.ObjectId(input.companyId),
-    //     $or: [{ name: { $regex: q, $options: 'i' } }, { description: { $regex: q, $options: 'i' } }],
-    //   })
+
     const docs = await this.getModelWithTenantFilter()
       .find({
         $or: [
@@ -128,7 +132,10 @@ export class ProductRepository
     return docs.map(this.toDomain);
   }
 
-  private toDomain(doc: any): Product {
+  /**
+   * @description Converte o documento do Mongoose para a entidade de Domínio.
+   */
+  private toDomain = (doc: any): Product => {
     return new Product(
       doc._id.toString(),
       doc.name,
@@ -140,4 +147,3 @@ export class ProductRepository
     );
   }
 }
-
