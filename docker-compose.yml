@@ -30,9 +30,7 @@ services:
       - ./backend:/app
       # Protege a pasta node_modules do contêiner contra o Windows
       - /app/node_modules
-    # Documentação: A mágica acontece aqui! 
-    # O Docker injeta todas as variáveis deste arquivo na memória do contêiner.
-
+      - ./uploads:/app/uploads
 
   frontend:
     build:

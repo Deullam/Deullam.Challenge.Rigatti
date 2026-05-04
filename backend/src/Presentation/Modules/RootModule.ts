@@ -30,6 +30,9 @@ import { UpdateProductUseCase } from '../../Application/Product/UseCases/UpdateP
 import { DeleteProductUseCase } from '../../Application/Product/UseCases/DeleteProductUseCase';
 import { GetProductUseCase } from '../../Application/Product/UseCases/GetProductUseCase';
 
+import { UploadProductImageUseCase } from '../../Application/Product/UseCases/UploadProductImageUseCase';
+import { LocalDiskStorageProvider } from '../../Infrastructure/Storage/LocalDiskStorageProvider';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -56,10 +59,12 @@ import { GetProductUseCase } from '../../Application/Product/UseCases/GetProduct
     CreateProductUseCase,
     UpdateProductUseCase,
     DeleteProductUseCase,
+    UploadProductImageUseCase,
     { provide: TOKENS.IUserRepository, useClass: UserRepository },
     { provide: TOKENS.IProductRepository, useClass: ProductRepository },
     { provide: TOKENS.IHasher, useClass: BcryptHasher },
     { provide: TOKENS.ITokenService, useClass: JwtTokenService },
+    { provide: TOKENS.IStorageProvider, useClass: LocalDiskStorageProvider },
   ],
   exports: [TenantContext, TenantInterceptor, RolesGuard, JwtAuthGuard],
 })

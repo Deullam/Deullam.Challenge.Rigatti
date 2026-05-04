@@ -8,6 +8,7 @@ export const TOKENS = {
   ICompanyRepository: Symbol('ICompanyRepository'),
   IUserRepository: Symbol('IUserRepository'),
   IProductRepository: Symbol('IProductRepository'),
+  IStorageProvider: Symbol('IStorageProvider'),
 
   IHasher: Symbol('IHasher'),
   ITokenService: Symbol('ITokenService'),

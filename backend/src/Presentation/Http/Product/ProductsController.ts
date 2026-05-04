@@ -5,6 +5,7 @@
  */
 
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { UseInterceptors, UploadedFile } from '@nestjs/common';
 import { CreateProductDto } from '../../../Application/Product/DTOs/CreateProductDto';
 import { UpdateProductDto } from '../../../Application/Product/DTOs/UpdateProductDto';
 import { CreateProductUseCase } from '../../../Application/Product/UseCases/CreateProductUseCase';
@@ -16,6 +17,10 @@ import { RequestUser } from '../../../Shared/IoC/http';
 import { JwtAuthGuard } from '../Auth/JwtAuthGuard';
 import { Roles } from '../Auth/RolesDecorator';
 import { RolesGuard } from '../Auth/RolesGuard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { UploadProductImageUseCase } from '../../../Application/Product/UseCases/UploadProductImageUseCase';
 
 // Documentação: Tipo customizado que garante que a requisição (req) sempre terá os dados do usuário autenticado.
 type RequestWithUser = { user: RequestUser };
@@ -31,6 +36,7 @@ export class ProductsController {
     private readonly createProduct: CreateProductUseCase,
     private readonly updateProduct: UpdateProductUseCase,
     private readonly deleteProduct: DeleteProductUseCase,
+    private readonly uploadProductImage: UploadProductImageUseCase,
   ) { }
 
   /**
@@ -82,5 +88,21 @@ export class ProductsController {
   @Roles('admin')
   async remove(@Req() req: RequestWithUser, @Param('id') id: string) {
     return this.deleteProduct.execute({ companyId: req.user.companyId, id });
+  }
+
+  /**
+  * @description Rota para upload de imagens de produtos. Protegida apenas para Administradores.
+  * Rota HTTP: POST /products/upload
+  */
+  @Post('upload')
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  // O Interceptor fica aqui porque o "Upload" via multipart/form-data é um detalhe do protocolo HTTP
+  @UseInterceptors(FileInterceptor('file'))
+  async upload(@UploadedFile() file: Express.Multer.File) {
+    // O Controller é apenas um "despachante"
+    const url = await this.uploadProductImage.execute({ file });
+
+    return { url };
   }
 }
