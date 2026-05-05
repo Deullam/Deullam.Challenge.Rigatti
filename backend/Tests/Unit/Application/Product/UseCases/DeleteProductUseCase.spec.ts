@@ -1,60 +1,47 @@
-/**
- * @author Deullam Justi
- * @copyright Copyright (c) 2026 Deullam Justi - Todos os direitos reservados.
- * @description Teste unitário para DeleteProductUseCase.
- */
-
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
 import { DeleteProductUseCase } from '../../../../../src/Application/Product/UseCases/DeleteProductUseCase';
-import { IProductRepository } from '../../../../../src/Domain/Product/IProductRepository';
 import { TOKENS } from '../../../../../src/Shared/IoC/tokens';
 
 describe('DeleteProductUseCase', () => {
   let useCase: DeleteProductUseCase;
-  let productRepository: jest.Mocked<IProductRepository>;
+  let mockProducts: any;
+
+  // Variáveis escopadas corretamente para todos os testes
+  const companyId = 'tenant-123';
+  const id = 'product-456';
 
   beforeEach(async () => {
+    mockProducts = {
+      deleteInCompany: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DeleteProductUseCase,
-        {
-          provide: TOKENS.IProductRepository,
-          useValue: { deleteInCompany: jest.fn() },
-        },
+        { provide: TOKENS.IProductRepository, useValue: mockProducts },
       ],
     }).compile();
 
     useCase = module.get<DeleteProductUseCase>(DeleteProductUseCase);
-    productRepository = module.get(TOKENS.IProductRepository);
   });
 
   it('should delete a product successfully', async () => {
-    const companyId = 'company1';
-    const productId = 'product1';
+    // Simula que o repositório encontrou e deletou
+    mockProducts.deleteInCompany.mockResolvedValue(true);
 
-    productRepository.deleteInCompany.mockResolvedValue(true);
+    const result = await useCase.execute({ companyId, id });
 
-    const result = await useCase.execute({ companyId, id: productId });
-
-    expect(productRepository.deleteInCompany).toHaveBeenCalledWith({
-      id: productId,
-      companyId,
-    });
-    expect(result).toBe(true);
+    expect(mockProducts.deleteInCompany).toHaveBeenCalledWith({ companyId, id });
+    expect(result).toEqual({ ok: true });
   });
 
-  it('should return false if product was not deleted', async () => {
-    const companyId = 'company1';
-    const productId = 'nonexistent';
+  it('should throw NotFoundException if product was not deleted', async () => {
+    // Simula que o repositório não encontrou o produto (retornou false)
+    mockProducts.deleteInCompany.mockResolvedValue(false);
 
-    productRepository.deleteInCompany.mockResolvedValue(false);
-
-    const result = await useCase.execute({ companyId, id: productId });
-
-    expect(productRepository.deleteInCompany).toHaveBeenCalledWith({
-      id: productId,
-      companyId,
-    });
-    expect(result).toBe(false);
+    await expect(useCase.execute({ companyId, id }))
+      .rejects
+      .toThrow(NotFoundException);
   });
 });

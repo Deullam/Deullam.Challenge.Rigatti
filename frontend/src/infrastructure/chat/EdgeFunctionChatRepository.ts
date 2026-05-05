@@ -1,12 +1,9 @@
 import type { ChatRepository } from "@/domain/chat/ChatRepository";
 import type { ChatMessage } from "@/domain/chat/ChatMessage";
 
-/**
- * Infrastructure layer — talks to the `chat` edge function over SSE.
- * Parses `data: …\n\n` lines and forwards token deltas to the caller.
- */
-export class EdgeFunctionChatRepository implements ChatRepository {
-  constructor(private readonly baseUrl: string = import.meta.env.VITE_SUPABASE_URL) { }
+export class NestChatRepository implements ChatRepository {
+  // Apontamos diretamente para o seu NestJS
+  constructor(private readonly baseUrl: string = import.meta.env.VITE_API_URL || 'http://localhost:3001') { }
 
   async streamReply({ access_token, messages, onToken, signal }: {
     access_token: string;
@@ -14,7 +11,8 @@ export class EdgeFunctionChatRepository implements ChatRepository {
     onToken: (token: string) => void;
     signal?: AbortSignal;
   }) {
-    const resp = await fetch(`${this.baseUrl}/functions/v1/chat`, {
+    // Chamamos a rota que vamos criar no backend (/chat)
+    const resp = await fetch(`${this.baseUrl}/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,6 +32,7 @@ export class EdgeFunctionChatRepository implements ChatRepository {
     let buf = "";
     let done = false;
 
+    // A sua lógica original brilhante de parsing contínua aqui intacta!
     while (!done) {
       const { done: d, value } = await reader.read();
       if (d) break;
@@ -51,7 +50,6 @@ export class EdgeFunctionChatRepository implements ChatRepository {
           const delta = parsed.choices?.[0]?.delta?.content;
           if (delta) onToken(delta);
         } catch {
-          // partial JSON — push back and wait for more
           buf = line + "\n" + buf;
           break;
         }

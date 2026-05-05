@@ -10,7 +10,7 @@ import { LogOut, Moon, Sun, Sparkles, Package, MessagesSquare } from "lucide-rea
  * Pure UI: it consumes auth/theme via hooks and never touches infrastructure directly.
  */
 export default function AppLayout() {
-  const { user, loading, role, companyName, signOut } = useAuth();
+  const { user, loading, role, companyId, logout } = useAuth();
   const { theme, toggle } = useTheme();
   const loc = useLocation();
 
@@ -27,8 +27,8 @@ export default function AppLayout() {
             <div className="h-8 w-8 rounded-lg gradient-hero grid place-items-center shadow-glow">
               <Sparkles className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span>Tenant<span className="text-primary">AI</span></span>
-            {companyName && <Badge variant="secondary" className="ml-2 hidden sm:inline-flex">{companyName}</Badge>}
+            <span>Deullam Rigatti<span className="text-primary">AI</span></span>
+            {companyId && <Badge variant="secondary" className="ml-2 hidden sm:inline-flex">{companyId}</Badge>}
           </Link>
           <nav className="flex items-center gap-1">
             <NavLink to="/dashboard" className={({ isActive }) =>
@@ -47,7 +47,7 @@ export default function AppLayout() {
             <Button variant="ghost" size="icon" onClick={toggle} aria-label="Alternar tema">
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
-            <Button variant="ghost" size="icon" onClick={signOut} aria-label="Sair">
+            <Button variant="ghost" size="icon" onClick={logout} aria-label="Sair">
               <LogOut className="h-4 w-4" />
             </Button>
           </div>

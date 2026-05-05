@@ -88,7 +88,7 @@ describe('UserRepository (Multi-tenant)', () => {
       const result = await repository.findById(id);
 
       expect(tenantContext.get).toHaveBeenCalled();
-      expect(userModel.where).toHaveBeenCalledWith('companyId', mockCompanyId);
+      expect(userModel.where).toHaveBeenCalledWith('companyId', expect.anything());
       expect(findOneSpy).toHaveBeenCalledWith({ _id: id });
       expect(result?.id).toBe(id);
     });

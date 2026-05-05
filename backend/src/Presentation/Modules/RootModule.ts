@@ -32,6 +32,8 @@ import { GetProductUseCase } from '../../Application/Product/UseCases/GetProduct
 
 import { UploadProductImageUseCase } from '../../Application/Product/UseCases/UploadProductImageUseCase';
 import { LocalDiskStorageProvider } from '../../Infrastructure/Storage/LocalDiskStorageProvider';
+import { ChatController } from '../Http/Chat/ChatController';
+import { ChatUseCase } from '../../Application/Chat/UseCases/ChatUseCase';
 
 @Module({
   imports: [
@@ -45,7 +47,7 @@ import { LocalDiskStorageProvider } from '../../Infrastructure/Storage/LocalDisk
     }),
     MongoosePersistenceModule,
   ],
-  controllers: [AuthController, ProductsController],
+  controllers: [AuthController, ProductsController, ChatController],
   providers: [
     TenantContext,
     TenantInterceptor,
@@ -60,6 +62,7 @@ import { LocalDiskStorageProvider } from '../../Infrastructure/Storage/LocalDisk
     UpdateProductUseCase,
     DeleteProductUseCase,
     UploadProductImageUseCase,
+    ChatUseCase,
     { provide: TOKENS.IUserRepository, useClass: UserRepository },
     { provide: TOKENS.IProductRepository, useClass: ProductRepository },
     { provide: TOKENS.IHasher, useClass: BcryptHasher },
