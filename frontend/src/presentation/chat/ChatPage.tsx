@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useAuth } from "@/presentation/auth/AuthContext";
-// Removemos o import do chatUseCases para termos controlo total aqui
 import type { ChatMessage } from "@/domain/chat/ChatMessage";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -107,7 +106,6 @@ export default function ChatPage() {
         }
       }
     } catch (e: any) {
-      // Se o backend der erro, o Toast vai mostrar EXATAMENTE o motivo na tela!
       toast({ title: "Erro na comunicação", description: e.message, variant: "destructive" });
       setMessages(prev => prev.slice(0, -1)); // Remove a mensagem para poder tentar novamente
     } finally {

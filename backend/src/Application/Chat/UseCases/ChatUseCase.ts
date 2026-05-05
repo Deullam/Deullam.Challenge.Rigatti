@@ -1,5 +1,5 @@
 import { Injectable, Inject, InternalServerErrorException, BadRequestException } from '@nestjs/common';
-import { streamText, tool } from 'ai';
+import { streamText, tool, stepCountIs } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { IProductRepository } from '../../../Domain/Product/IProductRepository';
@@ -38,38 +38,50 @@ export class ChatUseCase {
     const googleAI = createGoogleGenerativeAI({ apiKey });
 
     // 3. Formata as mensagens para o padrão do Vercel AI SDK
-    const formattedMessages = rawMessages.map((m) => ({
-      role: m.role as 'user' | 'assistant' | 'system',
-      content: m.content,
-    }));
+    //    IMPORTANTE: Filtra role 'system' pois o Vercel AI SDK envia o system prompt
+    //    separadamente via a propriedade `system`, não dentro do array de mensagens.
+    const formattedMessages = rawMessages
+      .filter((m) => m.role !== 'system')
+      .map((m) => ({
+        role: m.role as 'user' | 'assistant',
+        content: m.content,
+      }));
 
     // 4. Configuração principal da IA
-    const streamOptions: any = {
-      model: googleAI('gemini-3.1-flash-lite-preview'), // O teu modelo escolhido
+    //    Modelo: gemini-2.5-flash-lite — disponível no free tier do Google AI Studio
+    const result = streamText({
+      model: googleAI('gemini-2.5-flash-lite'),
       messages: formattedMessages,
 
       // 5. O "Cérebro" da IA: Instruções claras para forçar o uso do MongoDB
-      system: `Você é um assistente de vendas inteligente exclusivo desta empresa.
+      system: `Você é um assistente de vendas inteligente exclusivo desta empresa (companyId: ${companyId}).
       
       REGRA ABSOLUTA: Você não tem memória própria sobre os produtos. 
-      Sempre que o usuário perguntar o que a loja vende, pedir para listar produtos, consultar preços ou categorias, VOCÊ DEVE OBRIGATORIAMENTE acionar a ferramenta 'search_company_products'.
+      Sempre que o usuário perguntar o que a loja vende, pedir para listar produtos, consultar preços, categorias ou qualquer informação sobre o catálogo, VOCÊ DEVE OBRIGATORIAMENTE acionar a ferramenta 'search_company_products'.
       
       - Para listar todo o catálogo, acione a ferramenta enviando a query como uma string vazia "".
-      - Baseie a sua resposta apenas nos dados devolvidos pela ferramenta.`,
+      - Baseie a sua resposta EXCLUSIVAMENTE nos dados devolvidos pela ferramenta.
+      - NUNCA invente produtos. Se a ferramenta devolver uma lista vazia, informe ao usuário que não há produtos cadastrados.
+      - Responda sempre em português do Brasil.`,
 
-      maxSteps: 5, // Permite que a IA raciocine e chame a ferramenta várias vezes se precisar
+      // 6. Na ai@6, maxSteps foi substituído por stopWhen.
+      //    O default é stepCountIs(1), que faz apenas 1 chamada LLM.
+      //    Com stepCountIs(5), a IA pode: chamar tool → receber resultado → gerar texto.
+      stopWhen: stepCountIs(5),
 
-      // 6. Ferramentas: A ponte entre a IA e o teu MongoDB
+      // 7. Ferramentas: A ponte entre a IA e o teu MongoDB
       tools: {
         search_company_products: tool({
-          description: 'Busca produtos reais na base de dados da empresa (MongoDB).',
-          parameters: z.object({
-            query: z.string().describe('Termo para buscar no MongoDB. Envie "" (vazio) para trazer todos.'),
+          description: 'Busca produtos reais na base de dados da empresa (MongoDB). SEMPRE use esta ferramenta quando o usuário perguntar sobre produtos, catálogo, preços ou categorias.',
+          inputSchema: z.object({
+            query: z.string().describe('Termo para buscar no MongoDB. Envie "" (vazio) para trazer todos os produtos.'),
             maxPrice: z.number().optional().describe('Preço máximo desejado em reais.'),
             minPrice: z.number().optional().describe('Preço mínimo desejado em reais.')
           }),
-          execute: async ({ query, maxPrice, minPrice }: any) => {
+          execute: async ({ query, maxPrice, minPrice }) => {
             try {
+              console.log(`[ChatUseCase] Tool chamada: query="${query}", companyId="${companyId}"`);
+
               // Acesso real ao MongoDB usando a interface do teu repositório
               let products = await this.productRepository.searchInCompany({
                 companyId,
@@ -94,6 +106,8 @@ export class ChatUseCase {
                 products = products.filter(p => p.price >= minPrice);
               }
 
+              console.log(`[ChatUseCase] Produtos encontrados: ${products.length}`);
+
               // Formata e simplifica a lista devolvida para a IA não se confundir
               return products.map(p => ({
                 nome: p.name,
@@ -104,16 +118,21 @@ export class ChatUseCase {
 
             } catch (error) {
               // Se a ligação ao MongoDB falhar, a IA recebe esta mensagem e avisa o utilizador de forma amigável
-              console.error("Erro na ferramenta de busca do MongoDB:", error);
-              return "Ocorreu um erro interno ao tentar consultar o catálogo no banco de dados.";
+              console.error("[ChatUseCase] Erro na ferramenta de busca do MongoDB:", error);
+              return [];
             }
           },
-        } as any),
+        }),
       },
-    };
 
-    // 7. Inicia o fluxo (Stream) e devolve para o controlador lidar com o SSE
-    const result = streamText(streamOptions);
-    return result.textStream;
+      // 8. Callback de erro — o Vercel AI SDK engole erros silenciosamente por padrão.
+      //    Este callback garante que qualquer erro interno apareça no terminal.
+      onError: ({ error }) => {
+        console.error('[ChatUseCase] Erro no streamText:', error);
+      },
+    });
+
+    // 9. Retorna o objeto result inteiro para o controller iterar no fullStream.
+    return result;
   }
 }

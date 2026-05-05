@@ -5,10 +5,9 @@ import { TOKENS } from '../../../../src/Shared/IoC/tokens';
 import { TenantContext } from '../../../../src/Infrastructure/Tenancy/TenantContext';
 
 jest.mock('ai', () => ({
-  streamText: jest.fn().mockReturnValue({
-    textStream: 'mocked-stream',
-  }),
+  streamText: jest.fn(),
   tool: jest.fn((config) => config),
+  stepCountIs: jest.fn((n) => `stepCountIs(${n})`),
 }));
 
 jest.mock('@ai-sdk/google', () => ({
@@ -19,11 +18,22 @@ describe('ChatUseCase', () => {
   let useCase: ChatUseCase;
   let mockProductRepository: any;
   let mockTenantContext: any;
+  let streamTextMock: jest.Mock;
 
   const originalEnv = process.env;
 
   beforeEach(async () => {
     process.env = { ...originalEnv, GEMINI_API_KEY: 'test-key' };
+
+    // Importa e limpa o mock ANTES de cada teste
+    streamTextMock = require('ai').streamText as jest.Mock;
+    streamTextMock.mockReset();
+    streamTextMock.mockReturnValue({
+      textStream: 'mocked-text-stream',
+      fullStream: (async function* () {
+        yield { type: 'text-delta', text: 'mocked' };
+      })(),
+    });
 
     mockProductRepository = {
       searchInCompany: jest.fn(),
@@ -56,32 +66,53 @@ describe('ChatUseCase', () => {
       .toThrow(InternalServerErrorException);
   });
 
-  it('should call streamText with formatted messages and correct tools', async () => {
+  it('should return the full streamText result object with fullStream', async () => {
     const rawMessages = [{ role: 'user', content: 'Quero um notebook' }];
 
     const result = await useCase.execute(rawMessages);
 
-    expect(result).toBe('mocked-stream');
+    // O resultado deve conter tanto textStream quanto fullStream
+    expect(result).toHaveProperty('fullStream');
+    expect(result).toHaveProperty('textStream');
     expect(mockTenantContext.get).toHaveBeenCalledTimes(1);
 
-    const streamTextMock = require('ai').streamText;
     const callOptions = streamTextMock.mock.calls[0][0];
 
+    // Mensagens do usuário devem ser passadas (sem role 'system')
     expect(callOptions.messages).toEqual(rawMessages);
-    expect(callOptions.maxSteps).toBe(5);
+    // Na ai@6, usa stopWhen em vez de maxSteps
+    expect(callOptions.stopWhen).toBeDefined();
     expect(callOptions.tools).toHaveProperty('search_company_products');
+    // O system prompt deve ser uma string separada, não dentro do array
+    expect(typeof callOptions.system).toBe('string');
+    expect(callOptions.system).toContain('tenant-123');
+  });
+
+  it('should filter out system messages from rawMessages', async () => {
+    const rawMessages = [
+      { role: 'system', content: 'System prompt do frontend' },
+      { role: 'user', content: 'Olá' },
+    ];
+
+    await useCase.execute(rawMessages);
+
+    // Pega a chamada DESTE teste (index 0, pois o mock foi resetado no beforeEach)
+    const callOptions = streamTextMock.mock.calls[0][0];
+
+    // Só deve conter a mensagem do user, não a do system
+    expect(callOptions.messages).toEqual([{ role: 'user', content: 'Olá' }]);
   });
 
   it('should filter products by price in memory correctly within the tool execution', async () => {
-    mockProductRepository.searchInCompany.mockImplementation(async () => [
+    mockProductRepository.searchInCompany.mockResolvedValue([
       { name: 'Mouse', description: 'desc', price: 20, category: 'A' },
       { name: 'Teclado', description: 'desc', price: 60, category: 'A' },
       { name: 'Monitor', description: 'desc', price: 150, category: 'A' },
     ]);
 
-    await useCase.execute([]);
+    await useCase.execute([{ role: 'user', content: 'teste' }]);
 
-    const streamTextMock = require('ai').streamText;
+    // Pega a chamada DESTE teste (index 0, pois o mock foi resetado no beforeEach)
     const callOptions = streamTextMock.mock.calls[0][0];
     const toolExecute = callOptions.tools.search_company_products.execute;
 

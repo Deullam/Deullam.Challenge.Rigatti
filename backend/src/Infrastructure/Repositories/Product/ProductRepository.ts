@@ -118,15 +118,20 @@ export class ProductRepository
     maxResults: number;
   }): Promise<Product[]> {
     const q = input.query.trim();
-    if (!q) return [];
-
-    const docs = await this.getModelWithTenantFilter()
-      .find({
+    
+    let filter: FilterQuery<ProductSchemaClass> = {};
+    if (q) {
+      filter = {
         $or: [
           { name: { $regex: q, $options: 'i' } },
           { description: { $regex: q, $options: 'i' } },
+          { category: { $regex: q, $options: 'i' } },
         ],
-      })
+      };
+    }
+
+    const docs = await this.getModelWithTenantFilter()
+      .find(filter)
       .limit(Math.max(1, Math.min(input.maxResults, 50)))
       .lean();
     return docs.map(this.toDomain);
