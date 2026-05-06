@@ -60,7 +60,7 @@ A forma mais rápida de rodar o projeto inteiro com apenas um comando:
 
 1. Na raiz do projeto, execute: `make start`
 2. Aguarde os containers subirem.
-3. Na raiz, rode a semeadura de dados: `make seed` (opcional).
+3. Na raiz, rode a semeadura de dados: `make seed` (opcional, mas necessário para logar com os dados apresentados como exemplo na página de login).
 4. Acesse a aplicação em: `http://localhost:3000`
 
 ### 2. Inicialização Local (Manual)
@@ -77,14 +77,14 @@ Caso prefira rodar o Node.js e o Vite nativamente na sua máquina:
 
 ### 1. Sobre as Tecnologias Escolhidas (O "Upgrade" Tecnológico)
 O desafio solicitava **Express puro** no backend e **React** no frontend. Optei por ir além e utilizar **NestJS** e **Vite**, e aqui está o porquê:
-- **NestJS em vez de Express:** O NestJS roda sobre o Express por baixo dos panos, mas traz uma fundação arquitetural de nível Enterprise. Ele fornece Injeção de Dependências (IoC), Interceptors e Guards nativos. Para um sistema Multi-tenant, espalhar middlewares pelo Express abre margem para erros humanos (esquecer de passar a variável). Com o NestJS, consegui travar o `companyId` no nível do repositório de forma automática e inviolável.
+- **NestJS em vez de Express:** O NestJS roda sobre o Express por baixo dos panos, mas traz uma fundação arquitetural de nível Enterprise. Ele fornece Injeção de Dependências (IoC), Interceptors e Guards nativos. Para um sistema Multi-tenant, espalhar middlewares pelo Express abre margem para erros humanos. Com o NestJS, consegui travar o `companyId` no nível do repositório de forma automática e inviolável.
 - **Vite + React:** O Vite entrega o ecossistema React com uma performance de build e HMR incrivelmente superior às abordagens tradicionais. Como a aplicação é um SaaS (fechado atrás de login), não havia necessidade de frameworks pesados com SSR, tornando uma SPA turbinada com Vite a melhor escolha para a Experiência do Desenvolvedor (DX) e do Usuário.
 
 ### 2. Backend: Clean Architecture
 Escolhi estruturar o código dividindo responsabilidades em `Domain`, `Application`, `Infrastructure` e `Presentation`. 
 **Por quê?** Os Casos de Uso (`UseCases`) ficam completamente agnósticos ao framework web e ao banco de dados. Isso torna a troca de implementações (ex: mudar o provedor de IA ou de banco de dados) extremamente simples e facilita a criação de testes unitários.
 
-### 3. A "Regra de Ouro": Multi-tenant no Nível da Infraestrutura
+### 3. Multi-tenant no Nível da Infraestrutura
 Em vez de depender dos desenvolvedores lembrarem de passar o `companyId` em todos os controllers e repositórios (o que gera risco de vazamento de dados), implementei uma trava global:
 - Um **Interceptor** do NestJS extrai o `companyId` do token JWT e o coloca no contexto da thread assíncrona (`AsyncLocalStorage` do Node.js).
 - O `MultiTenantMongooseRepository` captura esse ID e injeta **automaticamente** como filtro base em todas as queries.
@@ -98,7 +98,7 @@ Para a integração com IA, utilizei o Vercel AI SDK 6.0 com o modelo Google Gem
 - Essa execução acontece **no Backend** de forma segura (herdando a trava Multi-tenant do banco de dados).
 - A resposta é enviada para o Frontend via **SSE (Server-Sent Events)** para streaming *token-by-token*.
 
-### 4. Frontend: Vite + React + Zustand
+### 5. Frontend: Vite + React + Zustand
 Abandonei abordagens pesadas em prol do **Vite** para garantir um build quase instantâneo e uma DX incrível.
 - **Estado Global:** `Zustand` e `Context API` para manter os dados do usuário autenticado disponíveis.
 - **Estilo:** `Tailwind CSS` e `shadcn/ui` para entregar um Design System limpo, moderno, responsivo e com suporte a Dark Mode "Out of the box", atendendo aos requisitos visuais do desafio de forma profissional.
@@ -138,3 +138,5 @@ Embora essa arquitetura seja escalável e muito robusta, em um ambiente de produ
 
 ---
 *Desafio Técnico Rigatti | Construído com ☕ e TypeScript.*
+# Deullam Justi
+# Copyright (c) Maio de 2026 Deullam Justi - Todos os direitos reservados.
