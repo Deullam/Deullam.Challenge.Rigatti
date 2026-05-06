@@ -3,7 +3,7 @@ import type { ChatMessage } from "@/domain/chat/ChatMessage";
 
 export class NestChatRepository implements ChatRepository {
   // Apontamos diretamente para o seu NestJS
-  constructor(private readonly baseUrl: string = import.meta.env.VITE_API_URL || 'http://localhost:3001') { }
+  constructor(private readonly baseUrl: string = import.meta.env.API_URL || 'http://localhost:3001') { }
 
   async streamReply({ access_token, messages, onToken, signal }: {
     access_token: string;

@@ -42,7 +42,7 @@ services:
     environment:
       NODE_ENV: development
       # Vite usa o prefixo VITE_ para variáveis públicas
-      VITE_API_URL: http://localhost:3001
+      API_URL: http://localhost:3001
     depends_on:
       - backend
     volumes:
