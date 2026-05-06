@@ -15,8 +15,17 @@ export class NestAuthRepository implements IAuthRepository {
  * Garante que os nomes das chaves no LocalStorage sejam compatíveis com o AuthContext.
  */
   async login(credentials: ILoginCredentials): Promise<{ user: IAuthUser; access_token: string }> {
-    // 1. Chamada direta à tua API NestJS
-    const response = await api.post('/auth/login', credentials);
+    let response;
+    try {
+      // 1. Chamada direta à tua API NestJS
+      response = await api.post('/auth/login', credentials);
+    } catch (error: any) {
+      if (error.response?.data?.message === 'Invalid credentials.') {
+        throw new Error('Credenciais inválidas. Verifique seu e-mail e senha.');
+      }
+      throw new Error(error.response?.data?.message || 'Erro ao conectar com o servidor.');
+    }
+
     const { access_token, user } = response.data;
 
     // 2. Documentação: Forçamos o salvamento com os nomes que o nosso Contexto espera
@@ -36,7 +45,15 @@ export class NestAuthRepository implements IAuthRepository {
   async register(credentials: IRegisterCredentials): Promise<{ user: IAuthUser; access_token: string; companyName: string }> {
     // Documentação: O Repositório envia os dados (incluindo o companyName) para o backend.
     // O backend NestJS é quem cria a empresa no banco e devolve o usuário recém-criado.
-    const response = await api.post('/auth/register', credentials);
+    let response;
+    try {
+      response = await api.post('/auth/register', credentials);
+    } catch (error: any) {
+      if (error.response?.data?.message === 'Email already in use.') {
+        throw new Error('Este e-mail já está em uso por outra conta.');
+      }
+      throw new Error(error.response?.data?.message || 'Erro ao conectar com o servidor durante o cadastro.');
+    }
 
     const { access_token, user, companyName } = response.data;
 
