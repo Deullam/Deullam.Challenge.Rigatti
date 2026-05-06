@@ -29,13 +29,16 @@ export class UserRepository
     email: string;
     passwordHash: string;
     role: 'admin' | 'user';
-    companyId: string;
+    companyId?: string; // opcional, se não vier gera um novo
+    companyName: string;
   }): Promise<User> {
+    const objectId = input.companyId ? new Types.ObjectId(input.companyId) : new Types.ObjectId();
     const created = await this.userModel.create({
       email: input.email.toLowerCase(),
       passwordHash: input.passwordHash,
       role: input.role,
-      companyId: new Types.ObjectId(input.companyId),
+      companyId: objectId,
+      companyName: input.companyName,
     });
 
     return new User(
@@ -44,6 +47,7 @@ export class UserRepository
       created.passwordHash,
       created.role,
       created.companyId.toString(),
+      created.companyName || created.companyId.toString(),
     );
   }
 
@@ -59,6 +63,7 @@ export class UserRepository
       found.passwordHash,
       found.role,
       found.companyId.toString(),
+      found.companyName || found.companyId.toString(),
     );
   }
 
@@ -74,6 +79,7 @@ export class UserRepository
       found.passwordHash,
       found.role,
       found.companyId.toString(),
+      found.companyName || found.companyId.toString(),
     );
   }
 }

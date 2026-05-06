@@ -47,14 +47,14 @@ describe('RegisterUseCase', () => {
   it('should register a new user and return a token', async () => {
     userRepository.findByEmail.mockResolvedValue(null);
     hasher.hash.mockResolvedValue('hashed_pass');
-    const createdUser = new User('id1', 'new@test.com', 'hashed_pass', 'admin', 'company1');
+    const createdUser = new User('id1', 'new@test.com', 'hashed_pass', 'admin', 'company1', 'NewCorp');
     userRepository.create.mockResolvedValue(createdUser);
     tokenService.sign.mockResolvedValue('jwt_token');
 
     const result = await useCase.execute({
       email: 'new@test.com',
       password: 'password',
-      companyId: 'company1',
+      companyName: 'NewCorp',
       role: 'admin',
     });
 
@@ -63,14 +63,14 @@ describe('RegisterUseCase', () => {
     expect(userRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({
         email: 'new@test.com',
-        companyId: 'company1',
+        companyName: 'NewCorp',
         role: 'admin',
       }),
     );
   });
 
   it('should throw ConflictException if email is already in use', async () => {
-    const existingUser = new User('id1', 'exists@test.com', 'hash', 'admin', 'company1');
+    const existingUser = new User('id1', 'exists@test.com', 'hash', 'admin', 'company1', 'NewCorp');
     userRepository.findByEmail.mockResolvedValue(existingUser);
 
     await expect(

@@ -33,7 +33,13 @@ export class LoginUseCase {
 
     return {
       access_token,
-      user: { id: user.id, email: user.email, role: user.role, companyId: user.companyId },
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        role: user.role, 
+        companyId: user.companyId,
+        companyName: user.companyName 
+      },
     };
   }
 }

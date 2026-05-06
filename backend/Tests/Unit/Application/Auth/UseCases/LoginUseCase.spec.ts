@@ -45,7 +45,7 @@ describe('LoginUseCase', () => {
   });
 
   it('should authenticate correctly and return a token', async () => {
-    const mockUser = new User('id1', 'test@test.com', 'hashed_pass', 'admin', 'company1');
+    const mockUser = new User('id1', 'test@test.com', 'hashed_pass', 'admin', 'company1', 'TechCorp');
     userRepository.findByEmail.mockResolvedValue(mockUser);
     hasher.compare.mockResolvedValue(true);
     tokenService.sign.mockResolvedValue('jwt_token');
@@ -65,7 +65,7 @@ describe('LoginUseCase', () => {
   });
 
   it('should throw UnauthorizedException if password does not match', async () => {
-    const mockUser = new User('id1', 'test@test.com', 'hashed_pass', 'admin', 'company1');
+    const mockUser = new User('id1', 'test@test.com', 'hashed_pass', 'admin', 'company1', 'TechCorp');
     userRepository.findByEmail.mockResolvedValue(mockUser);
     hasher.compare.mockResolvedValue(false);
 

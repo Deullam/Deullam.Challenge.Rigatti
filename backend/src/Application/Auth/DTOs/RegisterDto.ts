@@ -15,7 +15,7 @@ export class RegisterDto {
   password!: string;
 
   @IsString()
-  companyId!: string;
+  companyName!: string;
 
   @IsOptional()
   @IsIn(['admin', 'user'])

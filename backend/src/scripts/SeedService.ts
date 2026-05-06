@@ -48,12 +48,14 @@ export class SeedService {
       passwordHash,
       role: 'admin',
       companyId: techCorp._id,
+      companyName: 'TechCorp',
     });
     await this.userModel.create({
       email: 'user@techcorp.com',
       passwordHash,
       role: 'user',
       companyId: techCorp._id,
+      companyName: 'TechCorp',
     });
 
     // FoodCorp Users
@@ -62,12 +64,14 @@ export class SeedService {
       passwordHash,
       role: 'admin',
       companyId: foodCorp._id,
+      companyName: 'FoodCorp',
     });
     await this.userModel.create({
       email: 'user@foodcorp.com',
       passwordHash,
       role: 'user',
       companyId: foodCorp._id,
+      companyName: 'FoodCorp',
     });
 
     // 3. Criação dos Produtos (TechCorp)

@@ -19,7 +19,7 @@ export class RegisterUseCase {
     @Inject(TOKENS.ITokenService) private readonly tokens: ITokenService,
   ) { }
 
-  async execute(input: { email: string; password: string; companyId: string; role?: 'admin' | 'user' }) {
+  async execute(input: { email: string; password: string; companyName: string; role?: 'admin' | 'user' }) {
     const existing = await this.users.findByEmail(input.email);
     if (existing) {
       throw new ConflictException('Email already in use.');
@@ -30,7 +30,7 @@ export class RegisterUseCase {
       email: input.email,
       passwordHash,
       role: input.role ?? 'admin',
-      companyId: input.companyId,
+      companyName: input.companyName,
     });
 
     const access_token = await this.tokens.sign({
@@ -41,7 +41,13 @@ export class RegisterUseCase {
 
     return {
       access_token,
-      user: { id: created.id, email: created.email, role: created.role, companyId: created.companyId },
+      user: { 
+        id: created.id, 
+        email: created.email, 
+        role: created.role, 
+        companyId: created.companyId,
+        companyName: created.companyName 
+      },
     };
   }
 }

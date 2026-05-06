@@ -22,6 +22,9 @@ export class UserSchemaClass {
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'CompanySchemaClass', index: true })
   companyId!: Types.ObjectId;
+
+  @Prop({ required: false, trim: true })
+  companyName?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserSchemaClass);

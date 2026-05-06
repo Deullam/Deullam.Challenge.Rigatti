@@ -11,7 +11,8 @@ export interface IUserRepository {
     email: string;
     passwordHash: string;
     role: 'admin' | 'user';
-    companyId: string;
+    companyId?: string;
+    companyName: string;
   }): Promise<User>;
 
   findByEmail(email: string): Promise<User | null>;

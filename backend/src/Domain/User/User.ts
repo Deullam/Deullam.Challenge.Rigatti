@@ -13,6 +13,7 @@ export class User {
     public readonly passwordHash: string,
     public readonly role: UserRole,
     public readonly companyId: string,
+    public readonly companyName: string,
   ) {}
 }
 
