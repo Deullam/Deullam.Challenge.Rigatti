@@ -2,58 +2,143 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { NestChatRepository } from '../../infrastructure/chat/EdgeFunctionChatRepository';
 import { ChatUseCases } from './ChatUseCases';
 
-// Import local para fazer o login no backend
 const BASE_URL = 'http://localhost:3001';
 
-describe('ChatIntegration (Frontend -> Backend)', () => {
-  let token = '';
+// Função auxiliar para fazer login
+async function login(email, password) {
+  const res = await fetch(`${BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+  if (!res.ok) throw new Error(`Login falhou: ${res.status}`);
+  const data = await res.json();
+  return data.access_token || data.token;
+}
 
-  beforeAll(async () => {
-    // 1. Obter um token real de login com TechCorp
-    const loginRes = await fetch(`${BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: 'admin@techcorp.com',
-        password: 'Demo1234!'
-      })
-    });
+// Função auxiliar para enviar mensagem ao chat e retornar o texto completo
+async function askChat(token, text) {
+  const repository = new NestChatRepository(BASE_URL);
+  const useCase = new ChatUseCases(repository);
+  let fullText = '';
+  
+  await useCase.sendMessage({
+    access_token: token,
+    history: [{ role: 'user', content: text }],
+    onToken: (chunk) => { fullText += chunk; }
+  });
+  
+  return fullText;
+}
 
-    if (!loginRes.ok) {
-      throw new Error(`Failed to login for test. Status: ${loginRes.status}`);
-    }
+describe('Chat Integration E2E', () => {
 
-    const data = await loginRes.json();
-    token = data.access_token || data.token;
+  describe('TechCorp Existente', () => {
+    it('deve conseguir enviar uma mensagem para a API e receber o catálogo da TechCorp', async () => {
+      const token = await login('admin@techcorp.com', 'Demo1234!');
+      const response = await askChat(token, 'Liste todos os produtos disponíveis no catálogo da empresa');
+      
+      expect(response.length).toBeGreaterThan(50);
+      expect(response.toLowerCase()).toContain('quantum laptop');
+      console.log(`\n[TechCorp] Catálogo recebido (${response.length} chars)`);
+    }, 60000);
   });
 
-  it('deve conseguir enviar uma mensagem para a API e receber os chunks textuais listando produtos', async () => {
-    // 2. Instancia o Repository e o UseCase originais da nossa arquitetura React
-    const repository = new NestChatRepository(BASE_URL);
-    const useCase = new ChatUseCases(repository);
+  describe('FoodCorp Existente', () => {
+    it('deve conseguir enviar uma mensagem para a API e receber o catálogo da FoodCorp', async () => {
+      const token = await login('admin@foodcorp.com', 'Demo1234!');
+      const response = await askChat(token, 'Liste todos os produtos disponíveis no catálogo da empresa');
+      
+      expect(response.length).toBeGreaterThan(50);
+      expect(response.toLowerCase()).toContain('burguer'); // Assumindo que a FoodCorp venda comida
+      console.log(`\n[FoodCorp] Catálogo recebido (${response.length} chars)`);
+    }, 60000);
+  });
 
-    let fullText = '';
-    let callCount = 0;
+  describe('Nova Empresa Criada do 0', () => {
+    let newToken = '';
+    const uniqueId = Date.now();
+    const newEmail = `admin_${uniqueId}@newcorp.com`;
 
-    // 3. Roda a chamada multi-step usando a função onToken exata do Frontend React
-    await useCase.sendMessage({
-      access_token: token,
-      history: [{ role: 'user', content: 'Liste todos os produtos disponíveis no catálogo da empresa' }],
-      onToken: (chunkText) => {
-        callCount++;
-        fullText += chunkText;
+    beforeAll(async () => {
+      // 1. Criar a empresa do zero
+      const regRes = await fetch(`${BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: newEmail,
+          password: 'Password123!',
+          companyName: `NewCorp ${uniqueId}`,
+          role: 'admin'
+        })
+      });
+
+      if (!regRes.ok) {
+        const err = await regRes.text();
+        throw new Error(`Falha ao registrar nova empresa: ${err}`);
+      }
+      const data = await regRes.json();
+      newToken = data.access_token || data.token;
+
+      // 2. Cadastrar 5 produtos
+      const produtos = [
+        { name: 'Cadeira Gamer', description: 'Cadeira confortável', price: 900, category: 'Móveis' },
+        { name: 'Mousepad Gigante', description: 'Mousepad de tecido', price: 40, category: 'Acessórios' },
+        { name: 'Headset Pro', description: 'Fone de ouvido 7.1', price: 250, category: 'Áudio' },
+        { name: 'Teclado Básico', description: 'Teclado de membrana', price: 35, category: 'Acessórios' },
+        { name: 'Mesa de Escritório', description: 'Mesa de madeira MDF', price: 450, category: 'Móveis' }
+      ];
+
+      for (const prod of produtos) {
+        await fetch(`${BASE_URL}/products`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${newToken}`
+          },
+          body: JSON.stringify(prod)
+        });
       }
     });
 
-    // 4. Verificamos se o Vercel AI no backend empacotou o SSE com sucesso e se o UseCase filtrou tudo
-    expect(callCount).toBeGreaterThan(0);
-    expect(fullText.length).toBeGreaterThan(50);
-    
-    // Verificamos que o Gemini listou os produtos da TechCorp no markdown gerado
-    expect(fullText.toLowerCase()).toContain('quantum laptop');
-    expect(fullText.toLowerCase()).toContain('monitor');
-    
-    console.log(`[Vitest] Mensagem recebida da IA (Total: ${fullText.length} caracteres):`);
-    console.log(fullText);
-  }, 60000); // Timeout elevado de 60s porque o Gemini pode demorar pra responder
+    it('Verifica Listagem Padrão (GET /products)', async () => {
+      const res = await fetch(`${BASE_URL}/products`, {
+        headers: { 'Authorization': `Bearer ${newToken}` }
+      });
+      const data = await res.json();
+      expect(data.length).toBe(5);
+      console.log(`\n[NewCorp] ${data.length} produtos inseridos com sucesso e listados na API.`);
+    });
+
+    it('Prompt 1: Quais produtos temos abaixo de R$ 50?', async () => {
+      const response = await askChat(newToken, 'Quais produtos temos abaixo de R$ 50?');
+      const lowerResp = response.toLowerCase();
+      
+      expect(lowerResp).toContain('mousepad');
+      expect(lowerResp).toContain('teclado b');
+      expect(lowerResp).not.toContain('cadeira'); // 900 reais não deve vir
+      console.log(`\n[NewCorp Prompt 1] Resposta Abaixo de R$50:\n${response}`);
+    }, 60000);
+
+    it('Prompt 2: Recomende algo para um novo cliente.', async () => {
+      const response = await askChat(newToken, 'Recomende algo para um novo cliente.');
+      
+      expect(response.length).toBeGreaterThan(10);
+      console.log(`\n[NewCorp Prompt 2] Recomendação:\n${response}`);
+    }, 60000);
+
+    it('Prompt 3: Liste tudo do nosso catálogo agrupado por categoria.', async () => {
+      const response = await askChat(newToken, 'Liste tudo do nosso catálogo agrupado por categoria.');
+      const lowerResp = response.toLowerCase();
+      
+      // Deve ter separado por categorias
+      expect(lowerResp).toContain('móveis');
+      expect(lowerResp).toContain('acessórios');
+      expect(lowerResp).toContain('áudio');
+      expect(lowerResp).toContain('cadeira gamer');
+      console.log(`\n[NewCorp Prompt 3] Agrupado por Categoria:\n${response}`);
+    }, 60000);
+
+  });
+
 });

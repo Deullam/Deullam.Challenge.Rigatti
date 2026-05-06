@@ -48,12 +48,11 @@ export class ChatUseCase {
       }));
 
     // 4. Configuração principal da IA
-    //    Modelo: gemini-2.5-flash-lite — disponível no free tier do Google AI Studio
+    //    Modelo: gemma-4-31b-it — modelo Gemma válido retornado pela API do Google
     const result = streamText({
-      model: googleAI('gemini-2.5-flash-lite'),
+      model: googleAI('gemma-4-31b-it'),
       messages: formattedMessages,
 
-      // 5. O "Cérebro" da IA: Instruções claras para forçar o uso do MongoDB
       system: `Você é um assistente de vendas inteligente exclusivo desta empresa (companyId: ${companyId}).
       
       REGRA ABSOLUTA: Você não tem memória própria sobre os produtos. 
@@ -62,7 +61,12 @@ export class ChatUseCase {
       - Para listar todo o catálogo, acione a ferramenta enviando a query como uma string vazia "".
       - Baseie a sua resposta EXCLUSIVAMENTE nos dados devolvidos pela ferramenta.
       - NUNCA invente produtos. Se a ferramenta devolver uma lista vazia, informe ao usuário que não há produtos cadastrados.
-      - Responda sempre em português do Brasil.`,
+      - Responda sempre em português do Brasil.
+      
+      INSTRUÇÕES ESPECÍFICAS PARA COMANDOS FREQUENTES:
+      1. Se o usuário perguntar "Quais produtos temos abaixo de R$ X?": Use a ferramenta passando o valor em 'maxPrice'.
+      2. Se o usuário pedir "Recomende algo para um novo cliente": Busque o catálogo todo (query "") e destaque 2 ou 3 produtos variados e populares com entusiasmo.
+      3. Se o usuário pedir "Liste tudo do nosso catálogo agrupado por categoria": Busque o catálogo todo (query "") e formate a resposta dividindo os produtos claramente por seções de Categoria usando Markdown (ex: ### Categoria A).`,
 
       // 6. Na ai@6, maxSteps foi substituído por stopWhen.
       //    O default é stepCountIs(1), que faz apenas 1 chamada LLM.

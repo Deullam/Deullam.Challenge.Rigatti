@@ -29,7 +29,7 @@ export class RegisterUseCase {
     const created = await this.users.create({
       email: input.email,
       passwordHash,
-      role: input.role ?? 'user',
+      role: input.role ?? 'admin',
       companyId: input.companyId,
     });
 
