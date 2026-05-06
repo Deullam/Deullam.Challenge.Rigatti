@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import { Sparkles, Moon, Sun, Loader2, Database } from "lucide-react";
+import { Boxes, Moon, Sun, Loader2, Database } from "lucide-react";
 
 // Documentação: Dados estáticos para preencher o formulário rapidamente durante o desenvolvimento
 const DEMOS = [
@@ -108,7 +108,7 @@ export default function LoginPage() {
       <header className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2 font-semibold">
           <div className="h-8 w-8 rounded-lg gradient-hero grid place-items-center shadow-glow">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
+            <Boxes className="h-4 w-4 text-primary-foreground" />
           </div>
           Deullam Challenge Rigatti<span className="text-primary">AI</span>
         </div>

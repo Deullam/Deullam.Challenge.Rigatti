@@ -3,7 +3,7 @@ import { useAuth } from "@/presentation/auth/AuthContext";
 import { useTheme } from "@/presentation/shared/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, Moon, Sun, Sparkles, Package, MessagesSquare } from "lucide-react";
+import { LogOut, Moon, Sun, Boxes, Package, MessagesSquare } from "lucide-react";
 
 /**
  * Presentation-layer shell shared by all authenticated routes.
@@ -25,9 +25,9 @@ export default function AppLayout() {
         <div className="container flex h-16 items-center justify-between gap-4">
           <Link to="/dashboard" className="flex items-center gap-2 font-semibold">
             <div className="h-8 w-8 rounded-lg gradient-hero grid place-items-center shadow-glow">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
+              <Boxes className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span>Deullam Rigatti<span className="text-primary">AI</span></span>
+            <span>Deullam Challenge Rigatti<span className="text-primary">AI</span></span>
             {companyName && <Badge variant="secondary" className="ml-2 hidden sm:inline-flex">{companyName}</Badge>}
           </Link>
           <nav className="flex items-center gap-1">

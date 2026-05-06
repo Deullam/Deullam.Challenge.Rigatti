@@ -20,7 +20,7 @@ export default function ChatPage() {
   const [busy, setBusy] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { document.title = `Chat — TenantAI`; }, []);
+  useEffect(() => { document.title = `Chat — Deullam Challenge Rigatti AI`; }, []);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });

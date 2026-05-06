@@ -27,7 +27,7 @@ export default function ProductsPage() {
 
   const isAdmin = role === "admin";
 
-  useEffect(() => { document.title = `Produtos — ${companyName ?? "TenantAI"}`; }, [companyName]);
+  useEffect(() => { document.title = `Produtos — ${companyName ?? "Deullam Challenge Rigatti AI"}`; }, [companyName]);
 
   const load = async () => {
     setLoading(true);
