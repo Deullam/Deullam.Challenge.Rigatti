@@ -112,3 +112,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
  * @description Hook personalizado para usar a autenticação de forma simples em qualquer componente.
  */
 export const useAuth = () => useContext(Ctx);
+
+/**
+ * @copyright Copyright (c) 2026 Deullam - Todos os direitos reservados.
+ * @license Uso Proprietário. A cópia, distribuição ou modificação deste 
+ * ficheiro é estritamente proibida sem autorização prévia.
+ */

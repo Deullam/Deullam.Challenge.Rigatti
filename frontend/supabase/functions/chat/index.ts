@@ -252,3 +252,9 @@ Deno.serve(async (req) => {
     return jsonError(500, String(e instanceof Error ? e.message : e));
   }
 });
+
+/**
+ * @copyright Copyright (c) 2026 Deullam - Todos os direitos reservados.
+ * @license Uso Proprietário. A cópia, distribuição ou modificação deste 
+ * ficheiro é estritamente proibida sem autorização prévia.
+ */

@@ -34,3 +34,8 @@ export const ProductSchema = SchemaFactory.createForClass(ProductSchemaClass);
 ProductSchema.index({ companyId: 1, name: 1 });
 ProductSchema.index({ companyId: 1, category: 1 });
 
+/**
+ * @copyright Copyright (c) 2026 Deullam - Todos os direitos reservados.
+ * @license Uso Proprietário. A cópia, distribuição ou modificação deste 
+ * ficheiro é estritamente proibida sem autorização prévia.
+ */

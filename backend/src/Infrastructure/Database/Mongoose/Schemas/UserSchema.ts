@@ -30,3 +30,8 @@ export class UserSchemaClass {
 export const UserSchema = SchemaFactory.createForClass(UserSchemaClass);
 UserSchema.index({ companyId: 1, email: 1 }, { unique: true });
 
+/**
+ * @copyright Copyright (c) 2026 Deullam - Todos os direitos reservados.
+ * @license Uso Proprietário. A cópia, distribuição ou modificação deste 
+ * ficheiro é estritamente proibida sem autorização prévia.
+ */
