@@ -162,8 +162,4 @@ Para uma escala de produção real, os próximos passos seriam:
 ---
 *Desafio Técnico Rigatti | Construído com foco em Engenharia de Software e Valor de Negócio.*
 
-/**
- * @copyright Copyright (c) 2026 Deullam - Todos os direitos reservados.
- * @license Uso Proprietário. A cópia, distribuição ou modificação deste 
- * ficheiro é estritamente proibida sem autorização prévia.
- */
+## Copyright (c) 2026 Deullam - Todos os direitos reservados.
