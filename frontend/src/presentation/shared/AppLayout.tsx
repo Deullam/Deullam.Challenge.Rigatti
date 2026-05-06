@@ -10,7 +10,7 @@ import { LogOut, Moon, Sun, Sparkles, Package, MessagesSquare } from "lucide-rea
  * Pure UI: it consumes auth/theme via hooks and never touches infrastructure directly.
  */
 export default function AppLayout() {
-  const { user, loading, role, companyId, logout } = useAuth();
+  const { user, loading, role, companyName, logout } = useAuth();
   const { theme, toggle } = useTheme();
   const loc = useLocation();
 
@@ -28,7 +28,7 @@ export default function AppLayout() {
               <Sparkles className="h-4 w-4 text-primary-foreground" />
             </div>
             <span>Deullam Rigatti<span className="text-primary">AI</span></span>
-            {companyId && <Badge variant="secondary" className="ml-2 hidden sm:inline-flex">{companyId}</Badge>}
+            {companyName && <Badge variant="secondary" className="ml-2 hidden sm:inline-flex">{companyName}</Badge>}
           </Link>
           <nav className="flex items-center gap-1">
             <NavLink to="/dashboard" className={({ isActive }) =>

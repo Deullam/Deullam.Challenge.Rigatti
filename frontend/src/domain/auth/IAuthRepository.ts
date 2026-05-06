@@ -10,6 +10,7 @@ export interface IAuthUser {
   email: string;
   role: 'admin' | 'user';
   companyId: string;
+  companyName?: string;
 }
 
 export interface ILoginCredentials {

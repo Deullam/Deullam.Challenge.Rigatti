@@ -14,6 +14,7 @@ interface AuthState {
   user: IAuthUser | null;
   loading: boolean;
   companyId: string | null;
+  companyName: string | null;
   role: string | null;
   login: (credentials: ILoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
@@ -96,6 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       loading,
       companyId: user?.companyId ?? null,
+      companyName: user?.companyName ?? user?.companyId ?? null,
       role: user?.role ?? null,
       login,
       logout
