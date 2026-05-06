@@ -1,0 +1,53 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: deullam_challenge_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: deullam_challenge_backend
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./backend/.env
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      MONGODB_URI: mongodb://root:root@mongodb:27017/deullam_challenge?authSource=admin
+    depends_on:
+      - mongodb
+    volumes:
+      # Sincroniza seus arquivos locais com o contêiner em tempo real
+      - ./backend:/app
+      # Protege a pasta node_modules do contêiner contra o Windows
+      - /app/node_modules
+      - ./uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: deullam_challenge_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      # Vite usa o prefixo VITE_ para variáveis públicas
+      VITE_API_URL: http://localhost:3001
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  mongo-data:
