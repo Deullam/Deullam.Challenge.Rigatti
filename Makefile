@@ -47,17 +47,16 @@ stop-mongo: ## Para apenas o contêiner do MongoDB
 logs-mongo: ## Mostra os logs apenas do MongoDB em tempo real
 	docker-compose -f $(COMPOSE_FILE) logs -f mongodb
 
-	# Documentação: Comando para rodar o script de população (seed) do banco de dados
+# Documentação: Comando para rodar o script de população (seed) do banco de dados
+# O comando 'docker-compose exec -T' entra no contêiner 'backend' sem prender o terminal (evita travar no Windows)
+# e usa o 'node' para rodar o seu arquivo já compilado, garantindo execução super rápida.
 .PHONY: seed
 seed: ## Roda o script de seed para criar o usuário admin e dados iniciais
 	@echo "Iniciando a semeadura (seed) do banco de dados..."
-	# Documentação: O comando 'docker exec' entra no contêiner 'deullam_challenge_backend'
-	# e usa o 'npx ts-node' para rodar o seu arquivo TypeScript diretamente.
-	docker exec -it deullam_challenge_backend npx ts-node src/scripts/seed.ts
+	docker-compose exec -T backend node dist/scripts/seed.js
 	@echo "Seed finalizado com sucesso! Verifique o MongoDB Compass."
 
-
-	# Documentação: Comando para forçar a recriação das imagens Docker
+# Documentação: Comando para forçar a recriação das imagens Docker
 # Ideal para quando o código não atualiza ou quando instalamos novos pacotes (npm install)
 .PHONY: rebuild
 rebuild: ## Para os contêineres, limpa o cache e constrói tudo novamente
