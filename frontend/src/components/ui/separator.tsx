@@ -18,3 +18,9 @@ const Separator = React.forwardRef<
 Separator.displayName = SeparatorPrimitive.Root.displayName;
 
 export { Separator };
+
+/**
+ * @copyright Copyright (c) 2026 Deullam - Todos os direitos reservados.
+ * @license Uso Proprietário. A cópia, distribuição ou modificação deste 
+ * ficheiro é estritamente proibida sem autorização prévia.
+ */

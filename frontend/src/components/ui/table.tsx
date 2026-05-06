@@ -70,3 +70,9 @@ const TableCaption = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttribu
 TableCaption.displayName = "TableCaption";
 
 export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+
+/**
+ * @copyright Copyright (c) 2026 Deullam - Todos os direitos reservados.
+ * @license Uso Proprietário. A cópia, distribuição ou modificação deste 
+ * ficheiro é estritamente proibida sem autorização prévia.
+ */

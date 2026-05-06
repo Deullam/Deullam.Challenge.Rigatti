@@ -127,3 +127,9 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
 FormMessage.displayName = "FormMessage";
 
 export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField };
+
+/**
+ * @copyright Copyright (c) 2026 Deullam - Todos os direitos reservados.
+ * @license Uso Proprietário. A cópia, distribuição ou modificação deste 
+ * ficheiro é estritamente proibida sem autorização prévia.
+ */
