@@ -3,7 +3,7 @@
 ## 1. Visão Geral e Stack
 Aplicação Fullstack com isolamento total entre empresas (Multi-tenant).
 - **Backend:** NestJS, TypeScript, **Mongoose** (MongoDB).
-- **Frontend:** Next.js App Router (React), TypeScript, Tailwind CSS, shadcn/ui.
+- **Frontend:** React, TypeScript, Tailwind CSS, shadcn/ui.
 - **IA:** Vercel AI SDK (Gemini) com Tool Calling e Streaming SSE.
 - **Infra:** Docker Compose (MongoDB, Backend, Frontend).
 
@@ -16,9 +16,9 @@ Aproveitando o sistema de injeção de dependência do NestJS com Tokens (IoC).
 - `Shared/`: Tokens de IoC (`Symbol()`).
 
 ## 3. Regra de Ouro (Multi-tenant e Auth)
-- **Autenticação:** JWT incluindo `company_id` e `role` (admin, user).
-- **Tenant Context:** Middleware ou Interceptor do NestJS extrai o `company_id` do usuário e injeta via `AsyncLocalStorage`.
-- **Isolamento de Dados:** TODO repositório do Mongoose DEVE obrigatoriamente buscar o `company_id` no AsyncLocalStorage e aplicá-lo nos filtros das queries. A Empresa A nunca vê dados da Empresa B.
+- **Autenticação:** JWT incluindo `companyId` e `role` (admin, user).
+- **Tenant Context:** Middleware ou Interceptor do NestJS extrai o `companyId` do usuário e injeta via `AsyncLocalStorage`.
+- **Isolamento de Dados:** TODO repositório do Mongoose DEVE obrigatoriamente buscar o `companyId` no AsyncLocalStorage e aplicá-lo nos filtros das queries. A Empresa A nunca vê dados da Empresa B.
 
 ## 4. Funcionalidades Chave
 - **Auth:** Registro e Login de usuários.
@@ -29,7 +29,7 @@ Aproveitando o sistema de injeção de dependência do NestJS com Tokens (IoC).
 ## 5. Agente de IA (Chat POST /chat)
 - Protegido por AuthGuard.
 - Utiliza **Tool Calling** (ferramenta `search_company_products` tipada com Zod).
-- A tool consulta o `IProductRepository`, que por sua vez usa o Mongoose filtrando pelo `company_id` do Tenant Context.
+- A tool consulta o `IProductRepository`, que por sua vez usa o Mongoose filtrando pelo `companyId` do Tenant Context.
 - Resposta enviada via **Streaming (SSE)** para o frontend.
 
 ## 6. Qualidade e Testes

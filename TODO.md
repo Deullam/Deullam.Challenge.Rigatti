@@ -18,21 +18,21 @@ Este documento detalha o progresso atual do projeto e as próximas etapas de des
     *   [x] `ListProductsUseCase` finalizado e testado.
     *   [x] `ListProductsUseCase.spec.ts` criado.
     *   [x] `GetProductUseCase` finalizado e testado.
-    *   [ ] Finalizar `CreateProductUseCase`, `UpdateProductUseCase`, `DeleteProductUseCase`.
+*   [x] Finalizar `CreateProductUseCase`, `UpdateProductUseCase`, `DeleteProductUseCase`.
 
 ## 2. Próximos Passos (Plano de Desenvolvimento Detalhado)
 
 ### 2.1. Backend (NestJS + Mongoose)
-*   **Finalizar CRUD de Produtos**: Completar e testar `Create`, `Update` e `Delete`.
-*   **Agente de IA (Chat POST /chat)**: Integrar Vercel AI SDK e Tool Calling.
-*   **Upload de Imagem**: Implementar endpoint com Multer.
-*   **Seed Script**: Criar script para popular o banco.
+*   **Finalizar CRUD de Produtos**: Completar e testar `Create`, `Update` e `Delete`. [CONCLUÍDO]
+*   **Agente de IA (Chat POST /chat)**: Integrar Vercel AI SDK e Tool Calling com modelo Gemma. [CONCLUÍDO]
+*   **Upload de Imagem**: Implementar endpoint com Multer. [CONCLUÍDO NA BASE]
+*   **Seed Script**: Script substituído por rotina de testes E2E dinâmicos no Vitest. [CONCLUÍDO]
 
-### 2.2. Frontend (Next.js App Router)
-*   [ ] Configuração base (Tailwind, shadcn/ui).
-*   [ ] Telas de Login/Registro.
-*   [ ] Dashboard de Produtos.
-*   [ ] Tela de Chat IA.
+### 2.2. Frontend (React + Vite)
+*   [x] Configuração base (Tailwind, shadcn/ui).
+*   [x] Telas de Login/Registro.
+*   [x] Dashboard de Produtos.
+*   [x] Tela de Chat IA com Server-Sent Events.
 
 ### 2.3. Qualidade e Testes
-*   [ ] Testes de E2E garantindo isolamento total entre Tenants.
+*   [x] Testes de E2E garantindo isolamento total entre Tenants via Vitest.
