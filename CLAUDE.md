@@ -26,10 +26,15 @@ All `make` targets run from the repo root and wrap `docker-compose`.
 ### Backend (`cd backend`)
 - Dev server (watch, SWC): `npm run start:dev`
 - Build: `npm run build` (NestJS, compiles to `dist/`)
-- Lint: `npm run lint` (ESLint, `--max-warnings=0`)
-- Test: `npm test` / single file: `npx jest path/to/file.spec.ts` / `npm run test:watch`
-- Tests use `mongodb-memory-server` (no live Mongo needed for unit/integration tests).
+- Lint: `npm run lint` (ESLint, `--max-warnings=0`; config in `backend/.eslintrc.js`)
+- Test (all): `npm test` (Jest picks up every `*.spec.ts` under `Tests/`, including the E2E ones)
+- Single file: `npx jest Tests/E2E/Products.e2e.spec.ts` / watch: `npm run test:watch`
+- Coverage: `npx jest --coverage` (collected from `src/**`)
+- Only E2E + integration (the slow, DB-backed ones): `npx jest Tests/E2E Tests/Integration --runInBand`
+- Tests use `mongodb-memory-server` — no live Mongo needed. The first run downloads the Mongo binary, so it can be slow; specs set a 60s timeout.
 - List available Gemini models (when the chat model id breaks): `node Tests/list_models.js` (needs `GEMINI_API_KEY`).
+
+**Test layout (`backend/Tests/`):** `Unit/` mirrors `src/` (use cases, repos, controllers in isolation, AI SDK mocked). `Integration/` + `E2E/` boot the real `AppModule` against in-memory Mongo via the `Tests/Helpers/createE2EApp.ts` helper. That helper sets `MONGODB_URI` to the in-memory URI **before** dynamically importing `AppModule` — required because `AppModule`/`RootModule` call `MongooseModule.forRoot(process.env.MONGODB_URI)` at import time, so importing it with the env unset makes Nest hang retrying the production DB. Reuse the helper for any new DB-backed E2E test. The Chat E2E mocks the `ai`/`@ai-sdk/google` modules but exercises the real tool → repository → Mongo path to assert tenant isolation.
 
 ### Frontend (`cd frontend`)
 - Dev server: `npm run dev` (Vite on `:8080` when run natively; the Docker container serves `:3000`)
