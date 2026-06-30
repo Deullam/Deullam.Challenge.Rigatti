@@ -60,12 +60,10 @@ describe('Auth (E2E)', () => {
       expect(res.body.user.role).toBe('user');
     });
 
-    it('rejects a duplicate email (ConflictException surfaced as 500 by the controller)', async () => {
+    it('rejects a duplicate email with 409 Conflict', async () => {
       await request(server).post('/auth/register').send(validUser()).expect(201);
 
-      // NOTE: AuthController envolve QUALQUER erro num HttpException 500, então o
-      // ConflictException (409) vira 500. Ver findings ao final da tarefa.
-      const res = await request(server).post('/auth/register').send(validUser()).expect(500);
+      const res = await request(server).post('/auth/register').send(validUser()).expect(409);
       expect(res.body.message).toContain('Email already in use');
     });
 
@@ -102,19 +100,19 @@ describe('Auth (E2E)', () => {
         .expect(201);
     });
 
-    it('rejects a wrong password (UnauthorizedException surfaced as 500)', async () => {
+    it('rejects a wrong password with 401 Unauthorized', async () => {
       const res = await request(server)
         .post('/auth/login')
         .send({ email: 'admin@techcorp.com', password: 'wrong-pass' })
-        .expect(500);
+        .expect(401);
       expect(res.body.message).toContain('Invalid credentials');
     });
 
-    it('rejects an unknown email (500)', async () => {
+    it('rejects an unknown email with 401', async () => {
       await request(server)
         .post('/auth/login')
         .send({ email: 'ghost@nowhere.com', password: 'secret123' })
-        .expect(500);
+        .expect(401);
     });
 
     it('returns 400 when the body fails DTO validation', async () => {
