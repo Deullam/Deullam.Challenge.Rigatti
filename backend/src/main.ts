@@ -7,11 +7,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { TenantInterceptor } from './Presentation/Http/Tenancy/TenantInterceptor';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Import ConfigService
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Documentação: Validação global de DTOs (class-validator). 'whitelist' remove
+  // propriedades não declaradas e 'forbidNonWhitelisted' rejeita payloads com campos extras.
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
 
   // Documentação: Instancia o serviço de configurações para ler o .env
   const configService = app.get(ConfigService);

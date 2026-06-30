@@ -28,7 +28,7 @@ export class ProductRepository
   /**
    * @description Lista os produtos. O filtro de empresa já é aplicado pelo getModelWithTenantFilter().
    */
-  async listByCompany(companyId: string): Promise<Product[]> {
+  async listByCompany(_companyId: string): Promise<Product[]> {
     const docs = await this.getModelWithTenantFilter()
       .find()
       .sort({ createdAt: -1 })
