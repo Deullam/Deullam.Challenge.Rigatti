@@ -9,6 +9,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { AbstractLoader, ExpressLoader } from '@nestjs/serve-static';
 import { TOKENS } from '../../src/Shared/IoC/tokens';
 import { ITokenService } from '../../src/Infrastructure/Security/Jwt/ITokenService';
 import { IStorageProvider } from '../../src/Application/Storage/IStorageProvider';
@@ -17,6 +18,13 @@ import { TenantInterceptor } from '../../src/Presentation/Http/Tenancy/TenantInt
 export type TestRole = 'admin' | 'user';
 
 let userCounter = 0;
+
+/**
+ * Opções do harness. `storage: 'mock'` (padrão) substitui o IStorageProvider por um jest.fn para
+ * não tocar o disco; `storage: 'real'` mantém o LocalDiskStorageProvider registrado no RootModule
+ * (grava em `<cwd>/uploads`) — usado pelos specs que validam o upload de verdade (RG-06).
+ */
+export type E2EOptions = { storage?: 'mock' | 'real' };
 
 export type E2EContext = {
   app: INestApplication;
@@ -30,6 +38,9 @@ export type E2EContext = {
   close: () => Promise<void>;
 };
 
+/** Contexto devolvido quando o harness sobe com o storage real: não há mock a inspecionar. */
+export type RealStorageE2EContext = Omit<E2EContext, 'storage'> & { storage: null };
+
 /**
  * Sobe o AppModule real apontando para um MongoDB em memória.
  *
@@ -38,7 +49,14 @@ export type E2EContext = {
  * dinamicamente — caso contrário o Nest tentaria conectar ao Mongo de produção (localhost:27017),
  * cada retry leva ~30s e o `beforeAll` estoura o timeout.
  */
-export async function createE2EApp(): Promise<E2EContext> {
+export function createE2EApp(): Promise<E2EContext>;
+export function createE2EApp(options: { storage: 'real' }): Promise<RealStorageE2EContext>;
+export function createE2EApp(options: { storage?: 'mock' }): Promise<E2EContext>;
+export async function createE2EApp(
+  options: E2EOptions = {},
+): Promise<E2EContext | RealStorageE2EContext> {
+  const useRealStorage = options.storage === 'real';
+
   // launchTimeout: o padrão do mongodb-memory-server é 10s. No Windows, o primeiro arranque do
   // binário mongod após boot/npm ci (scan do antivírus) ultrapassa esse limite e derruba a suíte
   // inteira com "Instance failed to start within 10000ms"; arranques quentes levam ~4s.
@@ -51,16 +69,27 @@ export async function createE2EApp(): Promise<E2EContext> {
   // Import dinâmico: garante que o forRoot leia a env já apontando para o Mongo em memória.
   const { AppModule } = await import('../../src/app.module');
 
-  const storage: { saveFile: jest.Mock } = {
-    saveFile: jest.fn().mockResolvedValue('http://localhost:3001/uploads/products/mock-image.jpg'),
-  };
+  const storage: { saveFile: jest.Mock } | null = useRealStorage
+    ? null
+    : {
+        saveFile: jest
+          .fn()
+          .mockResolvedValue('http://localhost:3001/uploads/products/mock-image.jpg'),
+      };
 
-  const moduleFixture: TestingModule = await Test.createTestingModule({
-    imports: [AppModule],
-  })
-    .overrideProvider(TOKENS.IStorageProvider)
-    .useValue(storage as IStorageProvider)
-    .compile();
+  // O ServeStaticModule escolhe o loader (Express/Fastify/Noop) na instanciação do provider
+  // AbstractLoader, lendo HttpAdapterHost.httpAdapter. No fluxo Test.createTestingModule().compile()
+  // o adapter só é definido depois, em createNestApplication(), então cai no NoopLoader e a rota
+  // estática /uploads NUNCA é montada (diferente do NestFactory.create de produção). Forçamos o
+  // ExpressLoader — o mesmo que main.ts obtém — para que o app de teste espelhe produção.
+  const builder = Test.createTestingModule({ imports: [AppModule] })
+    .overrideProvider(AbstractLoader)
+    .useValue(new ExpressLoader());
+  // Com storage real NÃO sobrescrevemos o token: o LocalDiskStorageProvider do RootModule é usado.
+  if (storage) {
+    builder.overrideProvider(TOKENS.IStorageProvider).useValue(storage as IStorageProvider);
+  }
+  const moduleFixture: TestingModule = await builder.compile();
 
   const app = moduleFixture.createNestApplication();
 
