@@ -4,7 +4,7 @@
  * @description Controlador de autenticação com proteção de erros (try/catch) adaptado para TypeScript estrito.
  */
 
-import { Body, Controller, Post, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, HttpException, InternalServerErrorException } from '@nestjs/common';
 import { LoginDto } from '../../../Application/Auth/DTOs/LoginDto';
 import { RegisterDto } from '../../../Application/Auth/DTOs/RegisterDto';
 import { LoginUseCase } from '../../../Application/Auth/UseCases/LoginUseCase';
@@ -23,14 +23,11 @@ export class AuthController {
       const resultado = await this.loginUseCase.execute(dto);
       return resultado;
     } catch (error: unknown) {
-      // Documentação: Verificação de tipo (Type Guard).
-      // Verifica se a variável 'error' é realmente um objeto de Erro que possui a propriedade '.message'.
+      // Erros de domínio (ex.: UnauthorizedException) já carregam o status HTTP correto;
+      // só os preservamos. Qualquer erro inesperado vira 500.
+      if (error instanceof HttpException) throw error;
       const mensagemErro = error instanceof Error ? error.message : 'Erro interno ao tentar fazer login';
-
-      throw new HttpException(
-        mensagemErro,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new InternalServerErrorException(mensagemErro);
     }
   }
 
@@ -39,15 +36,11 @@ export class AuthController {
     try {
       const resultado = await this.registerUseCase.execute(dto);
       return resultado;
-
     } catch (error: unknown) {
-      // Documentação: Mesma proteção de tipo aplicada no registro.
+      // Preserva o status de domínio (ex.: ConflictException = 409) e só envolve o que for inesperado.
+      if (error instanceof HttpException) throw error;
       const mensagemErro = error instanceof Error ? error.message : 'Erro interno ao tentar registrar usuário';
-
-      throw new HttpException(
-        mensagemErro,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new InternalServerErrorException(mensagemErro);
     }
   }
 }

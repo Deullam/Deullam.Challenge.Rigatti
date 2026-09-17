@@ -4,71 +4,43 @@
  * @description Testes de Integração para o fluxo de Produtos garantindo isolamento Multi-tenant e Uploads.
  */
 
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
+import { Types } from 'mongoose';
 import * as request from 'supertest';
-import { MongooseModule } from '@nestjs/mongoose';
-import { AppModule } from '../../../src/app.module'; // Ajuste o caminho conforme o seu projeto
-import { TestDatabase } from '../../Helpers/TestDatabase';
-import { TOKENS } from '../../../src/Shared/IoC/tokens';
-import { ITokenService } from '../../../src/Infrastructure/Security/Jwt/ITokenService';
-import { IStorageProvider } from '../../../src/Application/Storage/IStorageProvider';
-import { TenantInterceptor } from '../../../src/Presentation/Http/Tenancy/TenantInterceptor';
+import { createE2EApp, E2EContext } from '../../Helpers/createE2EApp';
+
+jest.setTimeout(60000);
 
 describe('Product Integration Flow (Multi-tenant)', () => {
+  let ctx: E2EContext;
   let app: INestApplication;
-  let testDb: TestDatabase;
-  let tokenService: ITokenService;
+  let mockStorageProvider: { saveFile: jest.Mock };
 
   // IDs de teste (Formato ObjectId válido do MongoDB) para duas empresas diferentes
-  const companyA = '60d5ec123456789012345671';
-  const companyB = '60d5ec123456789012345672';
+  const companyA = new Types.ObjectId().toString();
+  const companyB = new Types.ObjectId().toString();
 
   let tokenA: string;
   let tokenB: string;
 
-  // Criamos um "Mock" do StorageProvider para não gravar ficheiros reais no disco durante os testes
-  const mockStorageProvider: IStorageProvider = {
-    saveFile: jest.fn().mockResolvedValue('http://localhost:3001/uploads/products/mock-image.jpg'),
-  };
-
   beforeAll(async () => {
-    testDb = new TestDatabase();
-    await testDb.connect();
-
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        MongooseModule.forRoot(testDb.getUri()),
-        AppModule,
-      ],
-    })
-      // Substituímos o provedor real pelo nosso Mock
-      .overrideProvider(TOKENS.IStorageProvider)
-      .useValue(mockStorageProvider)
-      .compile();
-
-    app = moduleFixture.createNestApplication();
-
-    // Essencial para testar se os DTOs bloqueiam dados inválidos
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
-    const tenantInterceptor = app.get(TenantInterceptor);
-    app.useGlobalInterceptors(tenantInterceptor);
-    await app.init();
-
-    tokenService = app.get<ITokenService>(TOKENS.ITokenService);
+    // O helper sobe o AppModule real contra um MongoDB em memória, evitando
+    // que o Nest tente conectar no banco de produção (causa das falhas anteriores).
+    ctx = await createE2EApp();
+    app = ctx.app;
+    mockStorageProvider = ctx.storage;
 
     // Gera tokens válidos para os testes
-    tokenA = await tokenService.sign({ userId: 'userA', companyId: companyA, role: 'admin' });
-    tokenB = await tokenService.sign({ userId: 'userB', companyId: companyB, role: 'admin' });
+    tokenA = await ctx.signToken({ userId: 'userA', companyId: companyA, role: 'admin' });
+    tokenB = await ctx.signToken({ userId: 'userB', companyId: companyB, role: 'admin' });
   });
 
   afterAll(async () => {
-    await app.close();
-    await testDb.close();
+    await ctx.close();
   });
 
   beforeEach(async () => {
-    await testDb.clear();
+    await ctx.clearDatabase();
     jest.clearAllMocks(); // Limpa as chamadas do mock do storage antes de cada teste
   });
 

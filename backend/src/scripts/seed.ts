@@ -4,11 +4,10 @@
  * @description Script para popular o banco de dados com dados iniciais.
  */
 
-import { INestApplication, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
 import { SeedService } from './SeedService'; // Criaremos este serviço
-import { ConfigModule } from '@nestjs/config';
 
 async function bootstrapSeed() {
   const app = await NestFactory.create(AppModule);

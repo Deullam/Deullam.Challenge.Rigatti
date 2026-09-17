@@ -6,7 +6,7 @@
 
 import { Injectable, Logger, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { CompanySchemaClass } from '../Infrastructure/Database/Mongoose/Schemas/CompanySchema';
 import { UserSchemaClass } from '../Infrastructure/Database/Mongoose/Schemas/UserSchema';
 import { ProductSchemaClass } from '../Infrastructure/Database/Mongoose/Schemas/ProductSchema';

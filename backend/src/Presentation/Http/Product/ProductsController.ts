@@ -18,8 +18,6 @@ import { JwtAuthGuard } from '../Auth/JwtAuthGuard';
 import { Roles } from '../Auth/RolesDecorator';
 import { RolesGuard } from '../Auth/RolesGuard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { UploadProductImageUseCase } from '../../../Application/Product/UseCases/UploadProductImageUseCase';
 
 // Documentação: Tipo customizado que garante que a requisição (req) sempre terá os dados do usuário autenticado.
