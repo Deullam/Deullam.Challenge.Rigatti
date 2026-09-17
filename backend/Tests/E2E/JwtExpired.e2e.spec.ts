@@ -11,6 +11,7 @@
 import * as request from 'supertest';
 import { createE2EApp, E2EContext } from '../Helpers/createE2EApp';
 import { nowInSeconds, signTestJwt, tamperJwtPayload, TestJwtClaims } from '../Helpers/jwtTestTokens';
+import { PROTECTED_ROUTES } from '../Helpers/protectedRoutes';
 
 jest.setTimeout(60000);
 
@@ -25,13 +26,6 @@ const PRODUCTION_TTL = 7 * ONE_DAY;
 
 /** Corpo válido de criação de produto (usado para provar ausência de efeito colateral). */
 const PRODUCT_BODY = { name: 'Produto Tardio', description: 'desc', price: 10, category: 'x' };
-
-/** Rotas protegidas exercitadas com o token expirado. */
-const PROTECTED_ROUTES: Array<[label: string, method: 'get' | 'post', path: string, body?: object]> = [
-  ['GET /products', 'get', '/products'],
-  ['POST /products', 'post', '/products', PRODUCT_BODY],
-  ['POST /chat', 'post', '/chat', { messages: [{ role: 'user', content: 'Liste os produtos' }] }],
-];
 
 // Rastreio: jornada RG-10 do plano do PO (JWT expirado → 401, sem grace period).
 describe('RG-10 — expired JWTs are rejected with 401 (E2E)', () => {
@@ -112,7 +106,7 @@ describe('RG-10 — expired JWTs are rejected with 401 (E2E)', () => {
 
   // AC1 + negativo "expirado há poucos segundos": 401 imediato, sem grace period.
   describe('token expired seconds ago', () => {
-    it.each(PROTECTED_ROUTES)('shouldReject401On %s', async (_label, method, path, body) => {
+    it.each(PROTECTED_ROUTES)('shouldReject401On $label', async ({ method, path, body }) => {
       expectGeneric401(await callWithToken(expiredToken(30), method, path, body));
     });
 
