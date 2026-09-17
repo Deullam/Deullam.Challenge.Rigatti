@@ -43,7 +43,7 @@ All `make` targets run from the repo root and wrap `docker-compose`.
 - Test: `npm test` (Vitest, jsdom) / single file: `npx vitest run src/path/File.test.ts`
 
 ### Environment
-Both `backend/` and `frontend/` need a `.env` (copy from each `.env.example`). Backend **requires** `GEMINI_API_KEY` for chat, plus `MONGODB_URI`, `JWT_SECRET`. Note the Vite frontend reads `import.meta.env.API_URL` (not the conventional `VITE_` prefix) — see `frontend/src/lib/api.ts`.
+Both `backend/` and `frontend/` need a `.env` (copy from each `.env.example`). Backend **requires** `GEMINI_API_KEY` for chat, plus `MONGODB_URI`, `JWT_SECRET`. The Vite frontend reads `import.meta.env.VITE_API_URL` — the `VITE_` prefix is mandatory, since Vite only exposes prefixed vars to client code. It must be set at **build time**: `vite build` inlines the value into the bundle, so setting it only in the container at runtime has no effect on a pre-built bundle (see `frontend/src/lib/api.ts`). Falls back to `http://localhost:3001`.
 
 ## Architecture
 
