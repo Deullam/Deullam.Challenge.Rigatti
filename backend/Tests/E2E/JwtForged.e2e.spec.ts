@@ -23,6 +23,7 @@ import {
   tamperJwtPayload,
   TestJwtClaims,
 } from '../Helpers/jwtTestTokens';
+import { PROTECTED_ROUTES, VALID_PRODUCT_BODY } from '../Helpers/protectedRoutes';
 
 jest.setTimeout(60000);
 
@@ -36,14 +37,7 @@ const ATTACKER_SECRET = 'attacker-guessed-secret'; // gitleaks:allow
 const SECRET_PRODUCT_OF_A = 'Produto Secreto da A';
 
 /** Corpo válido de criação de produto (usado para provar ausência de efeito colateral). */
-const PRODUCT_BODY = { name: 'Produto Intruso', description: 'desc', price: 10, category: 'x' };
-
-/** Rotas protegidas exercitadas com cada token hostil. */
-const PROTECTED_ROUTES: Array<[label: string, method: 'get' | 'post', path: string, body?: object]> = [
-  ['GET /products', 'get', '/products'],
-  ['POST /products', 'post', '/products', PRODUCT_BODY],
-  ['POST /chat', 'post', '/chat', { messages: [{ role: 'user', content: 'Liste os produtos' }] }],
-];
+const PRODUCT_BODY = VALID_PRODUCT_BODY;
 
 // Rastreio: jornada RG-09 do plano do PO (JWT forjado / adulterado → 401 em rota protegida).
 describe('RG-09 — forged and tampered JWTs are rejected with 401 (E2E)', () => {
@@ -131,7 +125,7 @@ describe('RG-09 — forged and tampered JWTs are rejected with 401 (E2E)', () =>
 
   // AC1: assinatura com secret diferente do JWT_SECRET → 401 antes de qualquer controller.
   describe('token signed with a wrong secret', () => {
-    it.each(PROTECTED_ROUTES)('shouldReject401On %s', async (_label, method, path, body) => {
+    it.each(PROTECTED_ROUTES)('shouldReject401On $label', async ({ method, path, body }) => {
       const forged = signTestJwt(ATTACKER_SECRET, adminClaimsForA());
 
       const res = await callWithToken(forged, method, path, body);
@@ -185,8 +179,8 @@ describe('RG-09 — forged and tampered JWTs are rejected with 401 (E2E)', () =>
     });
 
     it.each(PROTECTED_ROUTES)(
-      'shouldReject401WithSwappedCompanyIdOn %s',
-      async (_label, method, path, body) => {
+      'shouldReject401WithSwappedCompanyIdOn $label',
+      async ({ method, path, body }) => {
         const tampered = tamperJwtPayload(companyB.token, { companyId: companyA.companyId });
 
         expectGeneric401(await callWithToken(tampered, method, path, body));
