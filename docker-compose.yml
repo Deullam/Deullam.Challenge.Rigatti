@@ -41,8 +41,12 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
-      # Vite usa o prefixo VITE_ para variáveis públicas
-      API_URL: http://localhost:3001
+      # Vite só expõe ao cliente variáveis com o prefixo VITE_.
+      # Este serviço roda o dev server (CMD `npm run dev` no Dockerfile), que lê as
+      # VITE_* do ambiente do contêiner no arranque — por isso basta defini-la aqui.
+      # Se o Dockerfile passar a fazer `vite build` dentro da imagem, esta variável
+      # tem de chegar como build arg/ENV ANTES do build (o Vite embute o valor no bundle).
+      VITE_API_URL: http://localhost:3001
     depends_on:
       - backend
     volumes:

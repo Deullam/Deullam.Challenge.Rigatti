@@ -59,8 +59,7 @@ export default function ChatPage() {
 
     try {
       // 3. Comunicação direta com o nosso ChatController do NestJS
-      // Ajuste a URL base se necessário
-      const response = await fetch("http://localhost:3001/chat", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
