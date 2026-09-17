@@ -37,11 +37,15 @@ const PRODUCTS_DIR = path.join(UPLOADS_ROOT, 'products');
 const listProductsDir = (): string[] =>
   fs.existsSync(PRODUCTS_DIR) ? fs.readdirSync(PRODUCTS_DIR) : [];
 
+/** Subconjunto do stream de resposta do superagent que o parser binário consome (só eventos). */
+type ResponseStream = { on(event: string, listener: (...args: any[]) => void): unknown };
+
 /**
  * Parser binário para o superagent: acumula o corpo cru em um Buffer em vez de tentar
  * interpretá-lo como texto/JSON — necessário para comparar byte a byte a imagem servida.
+ * Tipado estruturalmente (só `on`) para ser aceito pelo `NodeParser` do @types/superagent.
  */
-const binaryParser = (res: NodeJS.ReadableStream, cb: (err: Error | null, body: Buffer) => void) => {
+const binaryParser = (res: ResponseStream, cb: (err: Error | null, body: Buffer) => void) => {
   const chunks: Buffer[] = [];
   res.on('data', (chunk: Buffer) => chunks.push(chunk));
   res.on('end', () => cb(null, Buffer.concat(chunks)));
