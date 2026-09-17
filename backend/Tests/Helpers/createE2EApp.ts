@@ -39,7 +39,11 @@ export type E2EContext = {
  * cada retry leva ~30s e o `beforeAll` estoura o timeout.
  */
 export async function createE2EApp(): Promise<E2EContext> {
-  const mongod = await MongoMemoryServer.create();
+  // launchTimeout: o padrão do mongodb-memory-server é 10s. No Windows, o primeiro arranque do
+  // binário mongod após boot/npm ci (scan do antivírus) ultrapassa esse limite e derruba a suíte
+  // inteira com "Instance failed to start within 10000ms"; arranques quentes levam ~4s.
+  // 30s mantém folga abaixo do timeout de 60s dos hooks do Jest usado pelos specs.
+  const mongod = await MongoMemoryServer.create({ instance: { launchTimeout: 30_000 } });
 
   process.env.MONGODB_URI = mongod.getUri();
   process.env.JWT_SECRET = process.env.JWT_SECRET ?? 'e2e-test-secret';
