@@ -1,13 +1,18 @@
-import { supabase } from "@/integrations/supabase/client";
-import type { ProfileRepository } from "@/domain/auth/IAuthRepository";
+import { getSupabaseClient } from "@/integrations/supabase/client";
+import type { IProfileRepository } from "@/domain/auth/IAuthRepository";
 import type { Role } from "@/domain/auth/Auth";
 
 /**
  * Infrastructure layer — profiles + roles + companies access.
  * Hides the table shape from the rest of the app.
+ *
+ * Alternativa opcional ao NestProfileRepository: só é escolhida pelo composition
+ * root quando as variáveis VITE_SUPABASE_* existem. O cliente é obtido dentro de
+ * cada método para que importar este ficheiro nunca derrube o boot do app.
  */
-export class SupabaseProfileRepository implements ProfileRepository {
+export class SupabaseProfileRepository implements IProfileRepository {
   async loadCompany(userId: string) {
+    const supabase = getSupabaseClient();
     const { data } = await supabase
       .from("profiles")
       .select("companyId, companies(name)")
@@ -20,6 +25,7 @@ export class SupabaseProfileRepository implements ProfileRepository {
   }
 
   async loadRoles(userId: string): Promise<Role[]> {
+    const supabase = getSupabaseClient();
     const { data } = await supabase
       .from("user_roles")
       .select("role")
@@ -28,6 +34,7 @@ export class SupabaseProfileRepository implements ProfileRepository {
   }
 
   async attachCompanyToUser(userId: string, companyName: string) {
+    const supabase = getSupabaseClient();
     const { data: company, error } = await supabase
       .from("companies")
       .insert({ name: companyName })
