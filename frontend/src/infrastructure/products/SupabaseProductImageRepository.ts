@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabaseClient } from "@/integrations/supabase/client";
 import type { ProductImageRepository } from "@/domain/products/ProductRepository";
 
 /**
@@ -7,6 +7,7 @@ import type { ProductImageRepository } from "@/domain/products/ProductRepository
  */
 export class SupabaseProductImageRepository implements ProductImageRepository {
   async upload(companyId: string, file: File): Promise<{ url: string }> {
+    const supabase = getSupabaseClient();
     const path = `${companyId}/${crypto.randomUUID()}-${file.name}`;
     const { error } = await supabase.storage
       .from("product-images")
