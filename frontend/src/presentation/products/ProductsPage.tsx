@@ -92,7 +92,7 @@ export default function ProductsPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Produtos</h1>
-          <p className="text-muted-foreground">Catálogo da {companyName} — restrito por empresa via RLS.</p>
+          <p className="text-muted-foreground">Catálogo da {companyName} — isolado por empresa no repositório, via contexto de tenant.</p>
         </div>
         {isAdmin && (
           <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setEditing(null); }}>

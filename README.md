@@ -15,6 +15,27 @@ graph TD
 
 ---
 
+## 🖼️ O sistema em funcionamento
+
+Capturas da aplicação rodando com o seed (`make start` seguido de `make seed`), não de protótipo.
+
+**Entrada, com as contas de demonstração à vista:**
+
+![Tela de login com as contas de demonstração das duas empresas](docs/img/login.png)
+
+**O mesmo código, duas empresas, catálogos que nunca se cruzam.** O `companyId` vem do token e
+é aplicado no repositório, então a tela não tem como pedir o catálogo da outra empresa:
+
+![Catálogo da TechCorp](docs/img/catalogo-techcorp.png)
+
+![Catálogo da FoodCorp](docs/img/catalogo-foodcorp.png)
+
+As ilustrações dos produtos são SVGs versionados em `backend/seed-assets/products/`, que o seed
+publica em `uploads/seed/` e referencia por URL — o mesmo caminho do upload real de imagem, sem
+binário no banco.
+
+---
+
 ## 💼 Contexto de Negócio
 
 ### O Problema
@@ -42,7 +63,7 @@ Este SaaS permite que cada empresa suba seu catálogo e disponibilize um **Agent
 | :--- | :--- | :--- | :--- |
 | **Database** | **MongoDB** | Abri mão de *Row-Level Security (RLS)* nativo do Postgres. | Priorizei a flexibilidade de atributos de produtos e a velocidade de iteração de um schema dinâmico para catálogos heterogêneos. |
 | **Framework** | **NestJS** | Abri mão do minimalismo e baixa curva de aprendizado do Express. | Escolhi a robustez da Injeção de Dependências e a segurança nativa de *Interceptors* para garantir o isolamento multi-tenant. |
-| **State Mgmt** | **Zustand** | Abri mão do controle rigoroso e ecossistema vasto do Redux. | Priorizei uma DX (Developer Experience) superior e menor boilerplate, visto que o estado do tenant é direto e linear. |
+| **State Mgmt** | **TanStack Query + Context do React** | Abri mão de uma store global dedicada (Redux, Zustand). | O estado que importa aqui é cache de servidor (catálogo) e sessão do tenant: o TanStack Query resolve o primeiro e um Context resolve o segundo, sem uma camada a mais para manter. |
 | **Streaming** | **SSE** | Abri mão da comunicação bi-direcional completa de WebSockets. | SSE é muito mais leve e resiliente para streaming de tokens de IA, funcionando perfeitamente sobre HTTP/S sem necessidade de gerenciar estados complexos de conexão. |
 
 ---
