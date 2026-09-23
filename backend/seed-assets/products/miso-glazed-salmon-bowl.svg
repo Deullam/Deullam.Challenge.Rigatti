@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Miso Glazed Salmon Bowl</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#fbe9df"/><stop offset="1" stop-color="#efc5ab"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#552d21" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M144 300 H456 C448 406 386 454 300 454 C214 454 152 406 144 300 Z" fill="#fdf2ea"/>
+<ellipse cx="300" cy="300" rx="156" ry="40" fill="#fbf3e6"/>
+<g transform="rotate(-8 300 284)">
+<rect x="224" y="244" width="156" height="80" rx="18" fill="#e07a4e"/>
+<path d="M238 270 H366" stroke="#f7c5a8" stroke-width="10"/>
+<path d="M234 296 H370" stroke="#f7c5a8" stroke-width="10"/>
+</g>
+<ellipse cx="198" cy="296" rx="26" ry="14" transform="rotate(-20 198 296)" fill="#7ea33f" stroke-width="6"/><ellipse cx="226" cy="314" rx="26" ry="14" transform="rotate(4 226 314)" fill="#7ea33f" stroke-width="6"/><ellipse cx="404" cy="300" rx="26" ry="14" transform="rotate(28 404 300)" fill="#7ea33f" stroke-width="6"/><ellipse cx="378" cy="318" rx="26" ry="14" transform="rotate(52 378 318)" fill="#7ea33f" stroke-width="6"/>
+<ellipse cx="272" cy="328" rx="28" ry="11" transform="rotate(-12 272 328)" fill="#eaa6b0" stroke-width="6"/><ellipse cx="314" cy="332" rx="28" ry="11" transform="rotate(10 314 332)" fill="#eaa6b0" stroke-width="6"/>
+<circle cx="262" cy="266" r="7" fill="#f9e6d2" stroke="none"/><circle cx="300" cy="256" r="7" fill="#f9e6d2" stroke="none"/><circle cx="340" cy="270" r="7" fill="#f9e6d2" stroke="none"/>
+</g>
+</svg>

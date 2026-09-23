@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Spicy Tonkotsu Ramen</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#fdf1de"/><stop offset="1" stop-color="#f4d5a6"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#523823" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M124 290 H476 C466 398 396 452 300 452 C204 452 134 398 124 290 Z" fill="#d9743f"/>
+<path d="M150 366 H450" stroke="#fdf7ec" stroke-width="14" opacity="0.65"/>
+<ellipse cx="300" cy="290" rx="176" ry="44" fill="#f0d7a6"/>
+<path d="M182 296 Q214 268 250 296 Q286 322 322 296 Q358 268 396 296" stroke="#e5b65c" stroke-width="12"/>
+<path d="M196 322 Q230 300 264 322 Q300 344 336 322 Q370 300 404 322" stroke="#e5b65c" stroke-width="12"/>
+<ellipse cx="222" cy="272" rx="44" ry="33" fill="#fdf6e6"/>
+<ellipse cx="222" cy="272" rx="21" ry="15" fill="#eaa02e" stroke-width="6"/>
+<rect x="336" y="236" width="56" height="66" rx="5" transform="rotate(-9 364 270)" fill="#2f4a44"/>
+<circle cx="292" cy="258" r="9" fill="#6f9a3f" stroke="none"/><circle cx="316" cy="306" r="9" fill="#6f9a3f" stroke="none"/><circle cx="268" cy="300" r="9" fill="#6f9a3f" stroke="none"/><circle cx="396" cy="316" r="9" fill="#6f9a3f" stroke="none"/>
+<circle cx="250" cy="252" r="6" fill="#c33f2c" stroke="none"/><circle cx="340" cy="322" r="6" fill="#c33f2c" stroke="none"/><circle cx="190" cy="316" r="6" fill="#c33f2c" stroke="none"/>
+</g>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Aurora 4K Monitor</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#e6f3f5"/><stop offset="1" stop-color="#b6dce2"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#1e3f47" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<rect x="118" y="158" width="364" height="238" rx="18" fill="#f2fbfb"/>
+<rect x="140" y="180" width="320" height="194" rx="8" fill="#2f6470" stroke-width="0"/>
+<path d="M152 356 L288 190 H336 L200 356 Z" fill="#ffffff" opacity="0.15" stroke="none"/>
+<path d="M368 190 L408 190 L272 356 L232 356 Z" fill="#ffffff" opacity="0.1" stroke="none"/>
+<path d="M272 396 h56 l18 44 h-92 Z" fill="#2f6470"/>
+<rect x="206" y="436" width="188" height="20" rx="10" fill="#f2fbfb"/>
+</g>
+</svg>

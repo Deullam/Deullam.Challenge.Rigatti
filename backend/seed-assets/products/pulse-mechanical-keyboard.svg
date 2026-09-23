@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Pulse Mechanical Keyboard</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#ecebfa"/><stop offset="1" stop-color="#c6c5ec"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#2e2b52" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<rect x="95" y="222" width="410" height="180" rx="24" fill="#4b4786"/>
+<rect x="123" y="248" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="159" y="248" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="195" y="248" width="30" height="24" rx="6" fill="#6f6bc6" stroke-width="6"/><rect x="231" y="248" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="267" y="248" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="303" y="248" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="339" y="248" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="375" y="248" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="411" y="248" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="447" y="248" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="131" y="280" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="167" y="280" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="203" y="280" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="239" y="280" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="275" y="280" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="311" y="280" width="30" height="24" rx="6" fill="#6f6bc6" stroke-width="6"/><rect x="347" y="280" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="383" y="280" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="419" y="280" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="455" y="280" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="139" y="312" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="175" y="312" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="211" y="312" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="247" y="312" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="283" y="312" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="319" y="312" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="355" y="312" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="391" y="312" width="30" height="24" rx="6" fill="#f5f4fd" stroke-width="6"/><rect x="427" y="312" width="30" height="24" rx="6" fill="#6f6bc6" stroke-width="6"/>
+<rect x="225" y="346" width="150" height="26" rx="8" fill="#f5f4fd" stroke-width="6"/>
+</g>
+</svg>

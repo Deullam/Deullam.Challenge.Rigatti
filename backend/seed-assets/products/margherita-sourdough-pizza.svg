@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Margherita Sourdough Pizza</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#fbe9df"/><stop offset="1" stop-color="#efc5ab"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#552d21" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="300" cy="308" r="158" fill="#e8b96a"/>
+<circle cx="300" cy="308" r="124" fill="#c9543a" stroke-width="8"/>
+<circle cx="248" cy="238" r="24" fill="#faf0dc" stroke-width="6"/><circle cx="352" cy="246" r="27" fill="#faf0dc" stroke-width="6"/><circle cx="300" cy="312" r="30" fill="#faf0dc" stroke-width="6"/><circle cx="226" cy="330" r="24" fill="#faf0dc" stroke-width="6"/><circle cx="378" cy="336" r="27" fill="#faf0dc" stroke-width="6"/><circle cx="312" cy="394" r="30" fill="#faf0dc" stroke-width="6"/><circle cx="240" cy="400" r="24" fill="#faf0dc" stroke-width="6"/>
+<path transform="rotate(-12 300 208)" d="M300 182 Q315 208 300 234 Q285 208 300 182 Z" fill="#5f8c3f" stroke-width="6"/><path transform="rotate(40 200 286)" d="M200 260 Q215 286 200 312 Q185 286 200 260 Z" fill="#5f8c3f" stroke-width="6"/><path transform="rotate(-40 400 300)" d="M400 274 Q415 300 400 326 Q385 300 400 274 Z" fill="#5f8c3f" stroke-width="6"/><path transform="rotate(15 270 356)" d="M270 330 Q285 356 270 382 Q255 356 270 330 Z" fill="#5f8c3f" stroke-width="6"/><path transform="rotate(-20 368 400)" d="M368 374 Q383 400 368 426 Q353 400 368 374 Z" fill="#5f8c3f" stroke-width="6"/>
+</g>
+</svg>

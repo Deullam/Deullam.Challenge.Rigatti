@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Matcha Tiramisu</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#eef2dd"/><stop offset="1" stop-color="#d4dcb0"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#39411f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="300" cy="432" rx="150" ry="28" fill="#f7f9ec"/>
+<path d="M390 216 L426 184 V392 L390 424 Z" fill="#e3d4ae"/>
+<path d="M178 216 L214 184 H426 L390 216 Z" fill="#9bb35a"/>
+<circle cx="238" cy="204" r="6" fill="#6f8438" stroke="none"/><circle cx="286" cy="198" r="6" fill="#6f8438" stroke="none"/><circle cx="334" cy="206" r="6" fill="#6f8438" stroke="none"/><circle cx="382" cy="198" r="6" fill="#6f8438" stroke="none"/><circle cx="262" cy="192" r="6" fill="#6f8438" stroke="none"/><circle cx="358" cy="192" r="6" fill="#6f8438" stroke="none"/><circle cx="310" cy="188" r="6" fill="#6f8438" stroke="none"/>
+<g stroke="none">
+<rect x="178" y="216" width="212" height="34" fill="#8fa84f"/>
+<rect x="178" y="250" width="212" height="44" fill="#f7f0dd"/>
+<rect x="178" y="294" width="212" height="34" fill="#d8c187"/>
+<rect x="178" y="328" width="212" height="44" fill="#f7f0dd"/>
+<rect x="178" y="372" width="212" height="52" fill="#d8c187"/>
+</g>
+<path d="M178 250 H390" stroke-width="7"/>
+<path d="M178 294 H390" stroke-width="7"/>
+<path d="M178 328 H390" stroke-width="7"/>
+<path d="M178 372 H390" stroke-width="7"/>
+<path d="M178 216 H390 V424 H178 Z"/>
+<path d="M390 216 L426 184 V392 L390 424"/>
+</g>
+</svg>
