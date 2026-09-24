@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Wagyu Smash Burger</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#fbe9df"/><stop offset="1" stop-color="#efc5ab"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#552d21" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M156 276 C156 192 220 150 300 150 C380 150 444 192 444 276 Z" fill="#e0a55c"/>
+<ellipse cx="240" cy="206" rx="15" ry="9" transform="rotate(0 240 206)" fill="#faecd0" stroke-width="5"/><ellipse cx="300" cy="188" rx="15" ry="9" transform="rotate(29 300 188)" fill="#faecd0" stroke-width="5"/><ellipse cx="360" cy="208" rx="15" ry="9" transform="rotate(58 360 208)" fill="#faecd0" stroke-width="5"/><ellipse cx="206" cy="246" rx="15" ry="9" transform="rotate(87 206 246)" fill="#faecd0" stroke-width="5"/><ellipse cx="394" cy="246" rx="15" ry="9" transform="rotate(116 394 246)" fill="#faecd0" stroke-width="5"/><ellipse cx="300" cy="244" rx="15" ry="9" transform="rotate(145 300 244)" fill="#faecd0" stroke-width="5"/>
+<path d="M154 278 Q186 316 224 288 Q260 320 298 290 Q336 320 372 288 Q410 318 446 278 Z" fill="#7f9a4a"/>
+<rect x="160" y="300" width="280" height="40" rx="18" fill="#6b3d29"/>
+<path d="M150 344 H450 Q444 372 424 368 Q410 392 392 366 Q372 390 356 364 Q336 388 320 366 Q298 390 282 364 Q260 388 244 366 Q222 390 206 366 Q186 390 172 366 Q156 366 150 344 Z" fill="#e8ab3c"/>
+<rect x="160" y="378" width="280" height="30" rx="14" fill="#6b3d29"/>
+<path d="M164 410 H436 Q452 410 448 428 Q440 452 300 452 Q160 452 152 428 Q148 410 164 410 Z" fill="#d99a52"/>
+</g>
+</svg>

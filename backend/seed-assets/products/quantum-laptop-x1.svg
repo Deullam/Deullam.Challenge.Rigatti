@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Quantum Laptop X1</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#eaf1fb"/><stop offset="1" stop-color="#bdd2ee"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#27364f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<rect x="162" y="168" width="276" height="188" rx="16" fill="#f4f8fd"/>
+<rect x="182" y="188" width="236" height="148" rx="8" fill="#41597f" stroke-width="0"/>
+<path d="M196 320 L268 204 H306 L234 320 Z" fill="#ffffff" opacity="0.16" stroke="none"/>
+<path d="M300 176 h0" stroke-width="12"/>
+<path d="M164 366 H436 L492 420 Q496 432 482 432 H118 Q104 432 108 420 Z" fill="#f4f8fd"/>
+<path d="M258 424 H342" stroke="#41597f" stroke-width="10"/>
+</g>
+</svg>

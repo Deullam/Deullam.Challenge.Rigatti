@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Photon Smartphone 5G</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#ecebfa"/><stop offset="1" stop-color="#c6c5ec"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#2e2b52" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<rect x="212" y="146" width="176" height="308" rx="36" fill="#4b4786"/>
+<rect x="230" y="164" width="140" height="272" rx="22" fill="#f5f4fd" stroke-width="6"/>
+<circle cx="300" cy="186" r="7" fill="#2e2b52" stroke="none"/>
+<path d="M270 372 A44 44 0 0 1 330 372" stroke="#6f6bc6" stroke-width="11"/>
+<path d="M248 340 A74 74 0 0 1 352 340" stroke="#6f6bc6" stroke-width="11" opacity="0.65"/>
+<circle cx="300" cy="398" r="9" fill="#6f6bc6" stroke="none"/>
+<path d="M394 214 V254" stroke-width="12"/>
+</g>
+</svg>

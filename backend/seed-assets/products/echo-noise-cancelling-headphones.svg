@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Echo Noise-Cancelling Headphones</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#ecebfa"/><stop offset="1" stop-color="#c6c5ec"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#2e2b52" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M160 366 V312 A140 140 0 0 1 440 312 V366" stroke-width="26"/>
+<rect x="120" y="328" width="80" height="120" rx="36" fill="#4b4786"/>
+<rect x="400" y="328" width="80" height="120" rx="36" fill="#4b4786"/>
+<rect x="138" y="350" width="44" height="76" rx="22" fill="#f5f4fd" stroke-width="6"/>
+<rect x="418" y="350" width="44" height="76" rx="22" fill="#f5f4fd" stroke-width="6"/>
+</g>
+</svg>

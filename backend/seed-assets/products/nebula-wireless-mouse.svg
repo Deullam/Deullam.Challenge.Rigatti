@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Nebula Wireless Mouse</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#eaf1fb"/><stop offset="1" stop-color="#bdd2ee"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#27364f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<rect x="232" y="158" width="136" height="286" rx="68" fill="#f4f8fd"/>
+<ellipse cx="270" cy="212" rx="12" ry="32" fill="#ffffff" opacity="0.7" stroke="none"/>
+<path d="M300 162 V206"/>
+<path d="M300 268 V300"/>
+<rect x="288" y="206" width="24" height="60" rx="12" fill="#4f86c6"/>
+<path d="M240 306 Q300 328 360 306" stroke-width="8"/>
+</g>
+</svg>

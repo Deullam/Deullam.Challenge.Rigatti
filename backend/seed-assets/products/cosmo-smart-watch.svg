@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Cosmo Smart Watch</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#e6f3f5"/><stop offset="1" stop-color="#b6dce2"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#1e3f47" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<rect x="256" y="148" width="88" height="96" rx="20" fill="#2f6470"/>
+<rect x="256" y="356" width="88" height="96" rx="20" fill="#2f6470"/>
+<rect x="206" y="212" width="188" height="176" rx="46" fill="#f2fbfb"/>
+<rect x="226" y="232" width="148" height="136" rx="34" fill="#1e3f47" stroke-width="0"/>
+<path d="M250 300 h26 l16 -30 l22 58 l16 -34 l12 12 h26" stroke="#3f97a8" stroke-width="12"/>
+<rect x="392" y="278" width="16" height="36" rx="8" fill="#2f6470" stroke-width="8"/>
+</g>
+</svg>

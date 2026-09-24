@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Vortex Webcam Pro</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#e6f3f5"/><stop offset="1" stop-color="#b6dce2"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#1e3f47" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<rect x="186" y="166" width="228" height="180" rx="46" fill="#f2fbfb"/>
+<circle cx="300" cy="256" r="62" fill="#1e3f47" stroke-width="0"/>
+<circle cx="300" cy="256" r="36" fill="#3f97a8" stroke-width="0"/>
+<circle cx="283" cy="239" r="12" fill="#ffffff" opacity="0.75" stroke="none"/>
+<circle cx="216" cy="312" r="8" fill="#2f6470" stroke="none"/><circle cx="384" cy="312" r="8" fill="#2f6470" stroke="none"/>
+<rect x="284" y="344" width="32" height="26" fill="#2f6470" stroke-width="8"/>
+<path d="M186 368 H414 L392 424 H208 Z" fill="#2f6470"/>
+</g>
+</svg>

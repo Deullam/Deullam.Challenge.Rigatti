@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Molten Chocolate Lava Cake</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#fbe9df"/><stop offset="1" stop-color="#efc5ab"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#552d21" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="300" cy="424" rx="174" ry="36" fill="#fdf2ea"/>
+<circle cx="430" cy="386" r="42" fill="#f8efdc"/>
+<path d="M424 352 C412 360 408 372 410 382" stroke="#e2cfae" stroke-width="9"/>
+<path d="M206 280 V386 C206 408 246 420 296 420 C346 420 386 408 386 386 V280 Z" fill="#6b4130"/>
+<ellipse cx="296" cy="280" rx="90" ry="28" fill="#814f38"/>
+<ellipse cx="296" cy="282" rx="56" ry="18" fill="#31201a" stroke-width="8"/>
+<path d="M244 288 C232 320 252 338 240 364 C232 384 252 400 272 394 C290 388 294 366 284 350 C274 332 286 308 282 286 Z" fill="#31201a" stroke-width="8"/>
+<path d="M342 292 C356 314 338 330 350 352 C356 366 348 378 334 374" stroke="#31201a" stroke-width="14"/>
+</g>
+</svg>

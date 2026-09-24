@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Korean Fried Chicken</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#fdf1de"/><stop offset="1" stop-color="#f4d5a6"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#523823" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<g stroke-linecap="round">
+<path d="M296 348 L370 422" stroke-width="56"/>
+<circle cx="392" cy="418" r="32" fill="#523823" stroke="none"/>
+<circle cx="364" cy="446" r="32" fill="#523823" stroke="none"/>
+<path d="M296 348 L368 420" stroke="#f6e8cf" stroke-width="36"/>
+<circle cx="391" cy="418" r="23" fill="#f6e8cf" stroke="none"/>
+<circle cx="364" cy="445" r="23" fill="#f6e8cf" stroke="none"/>
+</g>
+<path d="M214 204 C282 152 388 178 400 262 C412 344 340 402 272 382 C216 366 190 314 194 268 C196 238 200 216 214 204 Z" fill="#c8752f"/>
+<path d="M232 244 Q276 216 318 236" stroke="#8c4a1c" stroke-width="9"/>
+<path d="M226 300 Q280 274 330 300" stroke="#8c4a1c" stroke-width="9"/>
+<path d="M252 348 Q300 330 348 344" stroke="#8c4a1c" stroke-width="9"/>
+<ellipse cx="264" cy="222" rx="11" ry="6" transform="rotate(0 264 222)" fill="#f8eeda" stroke-width="4"/><ellipse cx="346" cy="262" rx="11" ry="6" transform="rotate(41 346 262)" fill="#f8eeda" stroke-width="4"/><ellipse cx="292" cy="288" rx="11" ry="6" transform="rotate(82 292 288)" fill="#f8eeda" stroke-width="4"/><ellipse cx="360" cy="330" rx="11" ry="6" transform="rotate(123 360 330)" fill="#f8eeda" stroke-width="4"/><ellipse cx="244" cy="328" rx="11" ry="6" transform="rotate(164 244 328)" fill="#f8eeda" stroke-width="4"/><ellipse cx="316" cy="360" rx="11" ry="6" transform="rotate(205 316 360)" fill="#f8eeda" stroke-width="4"/>
+</g>
+</svg>

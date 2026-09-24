@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Hibiscus Iced Tea</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#fbe9df"/><stop offset="1" stop-color="#efc5ab"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#552d21" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M226 158 L246 430 C248 448 262 458 300 458 C338 458 352 448 354 430 L374 158 Z" fill="#ffffff" fill-opacity="0.5"/>
+<path d="M236 226 L252 428 C253 440 266 446 300 446 C334 446 347 440 348 428 L364 226 Z" fill="#b6465a" stroke-width="0"/>
+<g stroke="#ffffff" stroke-opacity="0.85" stroke-width="7" fill="#ffffff" fill-opacity="0.45">
+<rect x="254" y="252" width="56" height="52" rx="10" transform="rotate(-14 282 278)"/>
+<rect x="296" y="318" width="56" height="52" rx="10" transform="rotate(16 324 344)"/>
+<rect x="246" y="368" width="52" height="48" rx="10" transform="rotate(8 272 392)"/>
+</g>
+<path d="M226 158 L246 430 C248 448 262 458 300 458 C338 458 352 448 354 430 L374 158" fill="none"/>
+<path d="M226 158 H374" stroke-width="10"/>
+<g transform="rotate(13 320 280)"><rect x="306" y="140" width="26" height="250" rx="13" fill="#e2a04a"/></g>
+<circle cx="392" cy="196" r="42" fill="#f4d98a"/>
+<circle cx="392" cy="196" r="31" fill="#f0c04a" stroke-width="6"/>
+<path d="M363 196 L421 196" stroke="#faecc6" stroke-width="7"/><path d="M377.5 170.8852632902513 L406.5 221.1147367097487" stroke="#faecc6" stroke-width="7"/><path d="M406.5 170.8852632902513 L377.5 221.1147367097487" stroke="#faecc6" stroke-width="7"/>
+<path transform="rotate(-30 228 186)" d="M228 152 Q248 186 228 220 Q208 186 228 152 Z" fill="#6f9a4f" stroke-width="6"/>
+<path transform="rotate(24 196 214)" d="M196 184 Q214 214 196 244 Q178 214 196 184 Z" fill="#87ab5d" stroke-width="6"/>
+</g>
+</svg>

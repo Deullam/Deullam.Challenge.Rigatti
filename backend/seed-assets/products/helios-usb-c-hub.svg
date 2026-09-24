@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="ti">
+<title id="ti">Helios USB-C Hub</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+<stop offset="0" stop-color="#eaf1fb"/><stop offset="1" stop-color="#bdd2ee"/>
+</linearGradient>
+<radialGradient id="gl" cx="0.34" cy="0.28" r="0.72">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<rect width="600" height="600" fill="url(#gl)"/>
+<g transform="translate(300 300) scale(0.87) translate(-300 -300)" fill="none" stroke="#27364f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<g transform="rotate(-18 82 236)">
+<rect x="54" y="212" width="58" height="48" rx="16" fill="#41597f"/>
+<rect x="70" y="230" width="30" height="14" rx="7" fill="#f4f8fd" stroke-width="6"/>
+</g>
+<path d="M156 302 C124 302 112 272 108 240" stroke-width="15"/>
+<rect x="156" y="250" width="292" height="104" rx="26" fill="#f4f8fd"/>
+<rect x="172" y="288" width="260" height="44" rx="12" fill="#41597f" stroke-width="8"/>
+<rect x="190" y="300" width="46" height="18" rx="5" fill="#f4f8fd" stroke-width="0"/><rect x="244" y="300" width="46" height="18" rx="5" fill="#f4f8fd" stroke-width="0"/><rect x="298" y="300" width="46" height="18" rx="5" fill="#f4f8fd" stroke-width="0"/><rect x="352" y="298" width="52" height="22" rx="5" fill="#f4f8fd" stroke-width="0"/>
+<circle cx="416" cy="270" r="10" fill="#4f86c6" stroke="none"/>
+<path d="M186 270 H330" stroke="#41597f" stroke-width="8" opacity="0.5"/>
+</g>
+</svg>
